@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Assets.scripts;
 using Assets.scripts.Enums;
 using TMPro;

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -10,6 +8,8 @@ public class Morgen : MonoBehaviour
 
     [SerializeField, FormerlySerializedAs("text")]
     protected TMP_Text MorgenHealth;
+    [SerializeField]
+    private GameController gameController;
     void Start()
     {
         MorgenHealth.text = health.ToString();
@@ -29,6 +29,10 @@ public class Morgen : MonoBehaviour
     public void Hit(int damage)
     {
         health -= damage;
+        if (health<0)
+        {
+            gameController.Win();
+        }
         MorgenHealth.text = health.ToString();
     }
 

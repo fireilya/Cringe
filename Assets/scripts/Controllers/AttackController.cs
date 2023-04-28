@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using Random = System.Random;
@@ -49,9 +47,9 @@ public class AttackController : MonoBehaviour
             {
                 newAttack = random.Next(0, int.MaxValue) % attackAmount;
 
-            } while (newAttack == previousAttack || (newAttack==3 && attackWithoutSupply<SupplyAttackRare));
+            } while (newAttack == previousAttack || (newAttack == 3 && attackWithoutSupply < SupplyAttackRare));
 
-            if (newAttack==3)
+            if (newAttack == 3)
             {
                 attackWithoutSupply = 0;
             }
@@ -63,9 +61,9 @@ public class AttackController : MonoBehaviour
             currentAttack = newAttack;
             Debug.Log(currentAttack);
             directors[currentAttack].Play();
-            
-            //currentAttack = 4;
-            //directors[4].Play();
+
+            //currentAttack = 3;
+            //directors[3].Play();
             isChooseAllowed = false;
             
         }

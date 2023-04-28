@@ -1,12 +1,8 @@
 using System;
 using Assets.scripts;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Assets.scripts.Enums;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.VFX;
 using Quaternion = UnityEngine.Quaternion;
@@ -207,6 +203,19 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))   
+        {
+            if (Math.Abs(Time.timeScale - 1) < 1e-3)
+            {
+                gameController.Pause();
+                isMovementBlocked = true;
+            }
+            else
+            {
+                gameController.Resume();
+                isMovementBlocked = false;
+            }
+        }
         if (isMovementBlocked) return;
         if (currentSpeed > speed)
         {

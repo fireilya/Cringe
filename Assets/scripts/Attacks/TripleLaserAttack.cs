@@ -25,7 +25,7 @@ public class TripleLaserAttack : MonoBehaviour, IAttack
     [SerializeField]
     private PlayableDirector postTripleLaserDirector;
 
-    private readonly float speed = 8.5f;
+    private readonly float speed = 9.5f;
 
     [SerializeField]
     private PlayableDirector tripleLaserDirector;

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,6 +12,11 @@ public class UIController : MonoBehaviour
     protected StartScreen startScreen;
     [SerializeField]
     protected GameScreen gameScreen;
+    [SerializeField]
+    protected WinScreen winScreen;
+
+    [SerializeField]
+    protected PauseScreen pauseScreen;
 
     private List<GameObject> screens=new();
 
@@ -21,13 +25,28 @@ public class UIController : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    public void Win()
+    {
+        gameScreen.gameObject.SetActive(false);
+        winScreen.gameObject.SetActive(true);
+    }
+
     public void Lose(int currentLife)
     {
         gameScreen.gameObject.SetActive(false);
         loseScreen.gameObject.SetActive(true);
         loseScreen.Lose(currentLife);
     }
-
+    public void Resume()
+    {
+        pauseScreen.gameObject.SetActive(false);
+        gameScreen.gameObject.SetActive(true);
+    }
+    public void Pause()
+    {
+        pauseScreen.gameObject.SetActive(true);
+        gameScreen.gameObject.SetActive(false);
+    }
     protected void UIModeFromTo(GameObject from, GameObject to)
     {
         from.SetActive(false);

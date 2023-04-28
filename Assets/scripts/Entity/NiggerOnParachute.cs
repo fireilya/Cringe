@@ -1,11 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Assets.scripts;
-using Assets.scripts.Enums;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.UI;
 using Random = System.Random;
 
 public class NiggerOnParachute : MonoBehaviour

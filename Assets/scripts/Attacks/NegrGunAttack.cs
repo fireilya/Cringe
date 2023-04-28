@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Assets.scripts.Enums;
 using Assets.scripts.Interfaces;
-using Unity.Collections;
 using UnityEngine;
 
 public class NegrGunAttack : MonoBehaviour, IAttack

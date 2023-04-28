@@ -1,11 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Assets.scripts.Interfaces;
 using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.Timeline;
-using Random = System.Random;
 
 public class ScriptableAttack : MonoBehaviour
 {

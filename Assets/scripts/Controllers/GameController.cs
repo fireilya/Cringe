@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,7 +25,29 @@ public class GameController : MonoBehaviour
     private int bossState;
     private int currentLife;
 
+    private void DestroyScene()
+    {
+        foreach (var GO in SceneManager.GetActiveScene().GetRootGameObjects())
+        {
+            if (GO.name is "Service" or "UI")
+            {
+                continue;
+            }
+            Destroy(GO);
+        }
+    }
 
+    public void Pause()
+    {
+        Time.timeScale = 0;
+        uiController.Pause();
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1;
+        uiController.Resume();
+    }
     public void Hit()
     {
         playerHealthAmount--;
@@ -37,6 +57,7 @@ public class GameController : MonoBehaviour
         player.StopAllCoroutines();
         attackController.LoseGame();
         player.gameObject.SetActive(false);
+        DestroyScene();
         uiController.Lose(currentLife);
         currentLife++;
         GameDataContainer.PackContainer(bossState, currentLife);
@@ -47,15 +68,21 @@ public class GameController : MonoBehaviour
         StartGame();
     }
 
-    public void UnpackData()
+    private void UnpackData()
     {
         bossState = GameDataContainer.BossState;
         currentLife = GameDataContainer.PlayerCurrentLife;
     }
 
+    public void Win()
+    {
+        uiController.Win();
+        Time.timeScale = 0;
+    }
     public void StartGame()
     {
         UnpackData();
+        Time.timeScale = 1;
         rocketController.Reload();
         player.gameObject.SetActive(true);
         attackController.AllowAttack(false);
