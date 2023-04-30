@@ -2,7 +2,7 @@ using Assets.scripts;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class bullet : MonoBehaviour
+public class PlayerBullet : MonoBehaviour
 {
     private float bulletSpeed = 30f;
 

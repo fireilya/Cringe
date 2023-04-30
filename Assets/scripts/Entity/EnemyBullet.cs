@@ -1,7 +1,7 @@
 using UnityEngine;
 using Timer = Assets.scripts.Timer;
 
-public class NiggerbBullet : MonoBehaviour
+public class EnemyBullet : MonoBehaviour
 {
     public Vector2 Direction { get; private set; }
     public float MoveSpeed { get; private set; }

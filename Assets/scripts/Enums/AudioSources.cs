@@ -4,6 +4,7 @@
     {
         Music,
         PlayerFX,
-        Gun
+        Gun,
+        BonusFX
     }
 }

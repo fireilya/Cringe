@@ -130,7 +130,7 @@ public class Player : MonoBehaviour
                 rocketController.Reload();
                 break;
         }
-        audioController.Play(AudioSources.PlayerFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);
+        audioController.Play(AudioSources.BonusFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);
     }
 
     private IEnumerator ShowUnhittablePlayer()

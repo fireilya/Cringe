@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Assets.scripts;
 using Assets.scripts.Enums;
 using Assets.scripts.Interfaces;
 using UnityEngine;
@@ -25,10 +26,13 @@ public class NegrGunAttack : MonoBehaviour, IAttack
     private Transform playerTransform;
 
     [SerializeField]
-    private NegrSpawner negrSpawner;
+    private Spawner negrSpawner;
 
     [SerializeField]
     private AudioController audioController;
+
+    //[SerializeField]
+    //private Timer PhaseTimer;
 
     private float currentRotation;
     private bool isRotationSetted;
@@ -54,12 +58,10 @@ public class NegrGunAttack : MonoBehaviour, IAttack
         attackController.AllowAttack(false);
     }
 
-    private IEnumerator DoShot()
+    public IEnumerator DelayShot()
     {
-        audioController.Play(AudioSources.Gun, FXClips.GunShot);
-        negrSpawner.CommonNegrShot(7, 6f, 0f, 90f, 5f);
+        negrSpawner.CommonNegrShot();
         yield return new WaitForSeconds(0.5f);
-        audioController.Play(AudioSources.Gun, FXClips.GunReload);
         SetNextRotation();
     }
 
@@ -72,7 +74,8 @@ public class NegrGunAttack : MonoBehaviour, IAttack
             EndAttack();
             return;
         }
-        StartCoroutine(DoShot());
+
+        StartCoroutine(DelayShot());
     }
 
     public void ReturnToZero()

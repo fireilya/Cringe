@@ -42,28 +42,28 @@ public class AttackController : MonoBehaviour
     {
         if (isChooseAllowed)
         {
-            var newAttack = -1;
-            do
-            {
-                newAttack = random.Next(0, int.MaxValue) % attackAmount;
+            //var newAttack = -1;
+            //do
+            //{
+            //    newAttack = random.Next(0, int.MaxValue) % attackAmount;
 
-            } while (newAttack == previousAttack || (newAttack == 3 && attackWithoutSupply < SupplyAttackRare));
+            //} while (newAttack == previousAttack || (newAttack == 3 && attackWithoutSupply < SupplyAttackRare));
 
-            if (newAttack == 3)
-            {
-                attackWithoutSupply = 0;
-            }
-            else
-            {
-                attackWithoutSupply++;
-            }
-            previousAttack = newAttack;
-            currentAttack = newAttack;
-            Debug.Log(currentAttack);
-            directors[currentAttack].Play();
+            //if (newAttack == 3)
+            //{
+            //    attackWithoutSupply = 0;
+            //}
+            //else
+            //{
+            //    attackWithoutSupply++;
+            //}
+            //previousAttack = newAttack;
+            //currentAttack = newAttack;
+            //Debug.Log(currentAttack);
+            //directors[currentAttack].Play();
 
-            //currentAttack = 3;
-            //directors[3].Play();
+            currentAttack = 4;
+            directors[4].Play();
             isChooseAllowed = false;
             
         }
