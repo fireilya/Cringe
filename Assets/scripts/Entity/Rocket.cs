@@ -35,7 +35,6 @@ public class Rocket : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rocketAudioSource=GetComponent<AudioSource>();
-        //Engine=transform.GetChild(0).gameObject;
     }
 
     void Update()

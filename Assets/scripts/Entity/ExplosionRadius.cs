@@ -3,7 +3,7 @@ using UnityEngine;
 public class ExplosionRadius : MonoBehaviour
 {
     private SpriteRenderer sprite;
-    private float fallSpeed = 1.0f;
+    private float fallSpeed = 1.2f;
     void Start()
     {
         sprite=GetComponent<SpriteRenderer>();

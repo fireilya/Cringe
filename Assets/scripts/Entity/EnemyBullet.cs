@@ -7,9 +7,22 @@ public class EnemyBullet : MonoBehaviour
     public float MoveSpeed { get; private set; }
     public float RotationSpeed { get; private set; }
     private bool isSetuped;
+    [SerializeField]
+    private int health=20;
+
+    [SerializeField]
+    private MissileData data;
 
     [SerializeField]
     private Timer lifeTimer;
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (data.DamageData.ContainsKey(collider.tag))
+        {
+            health -= data.DamageData[collider.tag];
+        }
+    }
     public void Setup(Vector2 direction, float moveSpeed, float rotationSpeed, float lifeTime)
     {
         isSetuped=true;
@@ -19,10 +32,6 @@ public class EnemyBullet : MonoBehaviour
         RotationSpeed=rotationSpeed;
     }
 
-    //void OnEnable()
-    //{
-        
-    //}
     void Start()
     {
         
@@ -30,7 +39,7 @@ public class EnemyBullet : MonoBehaviour
 
     void Update()
     {
-        if (lifeTimer.IsEnded && isSetuped)
+        if ((lifeTimer.IsEnded || health<=0) && isSetuped)
         {
             Destroy(gameObject);
         }

@@ -5,7 +5,7 @@ using Assets.scripts.Enums;
 using Assets.scripts.Interfaces;
 using UnityEngine;
 
-public class NegrGunAttack : MonoBehaviour, IAttack
+public class TrackRocketAttack : MonoBehaviour, IAttack
 {
     private readonly float _rotationSpeed = 100f;
 
@@ -26,7 +26,7 @@ public class NegrGunAttack : MonoBehaviour, IAttack
     private Transform playerTransform;
 
     [SerializeField]
-    private Spawner negrSpawner;
+    private Spawner rocketSpawner;
 
     [SerializeField]
     private AudioController audioController;
@@ -58,7 +58,7 @@ public class NegrGunAttack : MonoBehaviour, IAttack
 
     public IEnumerator DelayShot()
     {
-        negrSpawner.CommonNegrShot();
+        rocketSpawner.SpawnTrackRocket();
         yield return new WaitForSeconds(0.5f);
         SetNextRotation();
     }
@@ -97,6 +97,10 @@ public class NegrGunAttack : MonoBehaviour, IAttack
                 ? Mathf.Clamp(currentRotation, (float)neededRotation, (float)lastRotation)
                 : Mathf.Clamp(currentRotation, (float)lastRotation, (float)neededRotation);
             gun.eulerAngles = new Vector3(gun.eulerAngles.x, gun.eulerAngles.y, currentRotation);
+            gun.eulerAngles = new Vector3(
+                gun.eulerAngles.x,
+                gun.eulerAngles.y, 
+                currentRotation);
             if (Math.Abs(currentRotation - neededRotation) < 1e-3)
             {
                 EndPhase();
