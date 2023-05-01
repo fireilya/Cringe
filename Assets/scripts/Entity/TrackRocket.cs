@@ -14,7 +14,7 @@ public class TrackRocket : MonoBehaviour
     [SerializeField]
     private Timer lifeTimer;
 
-    private readonly float moveSpeed = 0f;
+    private readonly float moveSpeed = 8f;
 
     [SerializeField]
     private float neededRotation;
@@ -55,21 +55,11 @@ public class TrackRocket : MonoBehaviour
             explodeSpawner.SingleFireBurst();
             Destroy(gameObject);
         }
-
+        transform.localPosition += transform.right * moveSpeed * Time.deltaTime;
         currentRotation = (currentRotation < 0 ? 360 + currentRotation : currentRotation) % 360;
         neededRotation = VectorWorker.FindRotationByTarget(transform.position, playerTransform.position);
-        transform.localPosition+= transform.right*moveSpeed * Time.deltaTime;
-        var variant1 = currentRotation - neededRotation;
-        var variant2 = 360 - Math.Abs(currentRotation - neededRotation);
-        var direction =
-            Math.Abs(variant1) < Math.Abs(variant2) && currentRotation - neededRotation > 0
-            || Math.Abs(variant1) > Math.Abs(variant2) && currentRotation - neededRotation < 0
-                ? -1
-                : 1;
-        currentRotation += rotationSpeed * Time.deltaTime * direction;
-        currentRotation = neededRotation < currentRotation
-            ? Mathf.Clamp(currentRotation, neededRotation, currentRotation)
-            : Mathf.Clamp(currentRotation, currentRotation, neededRotation);
+        currentRotation =
+            VectorWorker.RotateToTargetWithSpeed(currentRotation, neededRotation, rotationSpeed * Time.deltaTime);
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, currentRotation + 180f);
     }
 

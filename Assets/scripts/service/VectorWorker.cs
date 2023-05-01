@@ -21,5 +21,22 @@ namespace Assets.scripts.service
             aimRotationAngle = aimRotationAngle < 0 ? 360 + aimRotationAngle : aimRotationAngle;
             return (float)aimRotationAngle;
         }
+
+        public static float RotateToTargetWithSpeed(float currentRotation, float neededRotation, float rotationDelta)
+        {
+            var isClampUp = neededRotation >= currentRotation;
+            var variant1 = currentRotation - neededRotation;
+            var variant2 = 360 - Math.Abs(currentRotation - neededRotation);
+            var direction =
+                Math.Abs(variant1) < Math.Abs(variant2) && currentRotation - neededRotation > 0
+                || Math.Abs(variant1) > Math.Abs(variant2) && currentRotation - neededRotation < 0
+                    ? -1
+                    : 1;
+            currentRotation += rotationDelta * direction;
+            currentRotation = !isClampUp
+                ? Mathf.Clamp(currentRotation, neededRotation, currentRotation)
+                : Mathf.Clamp(currentRotation, currentRotation, neededRotation);
+            return currentRotation;
+        }
     }
 }

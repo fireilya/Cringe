@@ -3,11 +3,12 @@ using System.Collections;
 using Assets.scripts;
 using Assets.scripts.Enums;
 using Assets.scripts.Interfaces;
+using Assets.scripts.service;
 using UnityEngine;
 
 public class NegrGunAttack : MonoBehaviour, IAttack
 {
-    private readonly float _rotationSpeed = 100f;
+    private readonly float _rotationSpeed = 120f;
 
     [SerializeField]
     private AttackController attackController;
@@ -18,9 +19,7 @@ public class NegrGunAttack : MonoBehaviour, IAttack
     [SerializeField]
     private Transform gun;
 
-    private double lastRotation;
-
-    private double neededRotation;
+    private float neededRotation;
 
     [SerializeField]
     private Transform playerTransform;
@@ -91,11 +90,9 @@ public class NegrGunAttack : MonoBehaviour, IAttack
         if (isAttackStarted && isRotationSetted)
         {
             gun.gameObject.SetActive(true);
-            var direction = currentRotation > neededRotation ? -1 : 1;
-            currentRotation += _rotationSpeed * Time.deltaTime * direction;
-            currentRotation = neededRotation < lastRotation
-                ? Mathf.Clamp(currentRotation, (float)neededRotation, (float)lastRotation)
-                : Mathf.Clamp(currentRotation, (float)lastRotation, (float)neededRotation);
+            currentRotation = (currentRotation < 0 ? 360 + currentRotation : currentRotation) % 360;
+            currentRotation =
+                VectorWorker.RotateToTargetWithSpeed(currentRotation, neededRotation, _rotationSpeed * Time.deltaTime);
             gun.eulerAngles = new Vector3(gun.eulerAngles.x, gun.eulerAngles.y, currentRotation);
             if (Math.Abs(currentRotation - neededRotation) < 1e-3)
             {
@@ -103,13 +100,10 @@ public class NegrGunAttack : MonoBehaviour, IAttack
             }
         }
     }
-
     private void SetNextRotation()
     {
-        lastRotation = currentRotation;
-        var aimRotationAngle = -Math.Atan(
-            (playerTransform.position.y-gun.position.y)/(gun.position.x-playerTransform.position.x))*Mathf.Rad2Deg;
-        isRotationSetted=true;
-        neededRotation = aimRotationAngle;
+        currentRotation = currentRotation < 0 ? 360 + currentRotation : currentRotation;
+        neededRotation = VectorWorker.FindRotationByTarget(gun.position, playerTransform.position);
+        isRotationSetted = true;
     }
 }
