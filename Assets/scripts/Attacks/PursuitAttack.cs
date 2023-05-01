@@ -19,6 +19,8 @@ public class PursuitAttack : MonoBehaviour, IAttack
     private Transform enemyAttackControllerTransform;
     [SerializeField]
     private AttackController attackController;
+    [SerializeField]
+    private PostAudioSource postAudioSource;
 
     [SerializeField]
     private Morgen enemy;
@@ -32,7 +34,6 @@ public class PursuitAttack : MonoBehaviour, IAttack
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isAttackStarted && isPositionSetted)
@@ -80,6 +81,7 @@ public class PursuitAttack : MonoBehaviour, IAttack
     public void EndPhase()
     {
         isPositionSetted=false;
+        Instantiate(postAudioSource);
         fireCircleSpawner.SingleFireBurst();
         currentPhaseCount++;
         if (currentPhaseCount < neededPhaseCount)

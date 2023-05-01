@@ -6,30 +6,33 @@ using Random = System.Random;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField]
-    private EnemyBullet negrBullet;
-    [SerializeField]
-    private EnemyBullet LJBullet;
-    [SerializeField]
-    private EnemyBullet fireBullet;
-    [SerializeField]
-    private LJRocket LJRocket;
-
-    [SerializeField]
-    private TrackRocket trackRocket;
-
-    [SerializeField, FormerlySerializedAs("gun")]    
-    private GameObject source;
-
-    private Random rnd= new();
-
-    [SerializeField]
-    private AudioController audioController;
-
     private readonly float maxSupplyShotDeviantAngle = 20f;
 
     private readonly int supplyShotBulletAmount = 5;
 
+    [SerializeField]
+    private AudioController audioController;
+
+    [SerializeField]
+    private EnemyBullet fireBullet;
+
+    [SerializeField]
+    private EnemyBullet LJBullet;
+
+    [SerializeField]
+    private LJRocket LJRocket;
+
+    [SerializeField]
+    private EnemyBullet negrBullet;
+
+    private readonly Random rnd = new();
+
+    [SerializeField]
+    [FormerlySerializedAs("gun")]
+    private GameObject source;
+
+    [SerializeField]
+    private TrackRocket trackRocket;
 
 
     private IEnumerator DoMultyExplodeShot(
@@ -46,7 +49,7 @@ public class Spawner : MonoBehaviour
         var rotationDelta = maxDeviantAngle * 2 / (bulletAmount - 1);
         var startOffset = 0f;
         var deltaOffset = rotationDelta / 2;
-        for (int i = 0; i < shotsNumber; i++)
+        for (var i = 0; i < shotsNumber; i++)
         {
             for (var j = -maxDeviantAngle + startOffset; j <= maxDeviantAngle + startOffset; j += rotationDelta)
             {
@@ -57,26 +60,23 @@ public class Spawner : MonoBehaviour
             yield return new WaitForSeconds(shotsDelay);
             startOffset += deltaOffset;
         }
-
-
     }
 
     private void DoExplodeShot(
         EnemyBullet bullet,
         int bulletAmount,
         float moveSpeed,
-        float rotationSpeed,    
+        float rotationSpeed,
         float maxDeviantAngle,
         float lifeTime = 1.0f)
     {
-        var forward = Vector2.left.Rotate(rnd.Next()%360);
+        var forward = Vector2.left.Rotate(rnd.Next() % 360);
         var rotationDelta = maxDeviantAngle * 2 / (bulletAmount - 1);
         for (var j = -maxDeviantAngle; j <= maxDeviantAngle; j += rotationDelta)
         {
             var newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
             newBullet.Setup(forward.Rotate(j), moveSpeed, rotationSpeed, lifeTime);
         }
-        
     }
 
     private IEnumerator DoShot(
@@ -99,6 +99,7 @@ public class Spawner : MonoBehaviour
                 var newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
                 newBullet.Setup(forward.Rotate(j), moveSpeed, rotationSpeed, lifeTime);
             }
+
             yield return new WaitForSeconds(shotTime);
             yield return new WaitForSeconds(shotsDelay);
         }
@@ -128,6 +129,7 @@ public class Spawner : MonoBehaviour
                 var newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
                 newBullet.Setup(forward.Rotate(j), moveSpeed, rotationSpeed, lifeTime);
             }
+
             audioController.Play(source, shotClip);
             yield return new WaitForSeconds(shotTime);
             audioController.Play(source, reloadClip);
@@ -143,26 +145,26 @@ public class Spawner : MonoBehaviour
     public void FireExplode()
     {
         StartCoroutine(DoMultyExplodeShot(
-            bullet: fireBullet,
-            shotsNumber: 6,
-            shotsDelay: 0.25f,
-            bulletAmount: 17,
-            moveSpeed: 3f,
-            rotationSpeed: 250f,
-            maxDeviantAngle: 180,
-            lifeTime: 10f));
+            fireBullet,
+            6,
+            0.25f,
+            17,
+            3f,
+            250f,
+            180,
+            10f));
     }
 
     public void SingleFireBurst()
     {
         DoExplodeShot(
-            bullet:fireBullet,
-            bulletAmount:17,
-            moveSpeed:3f,
-            rotationSpeed:250f,
-            maxDeviantAngle:180f,
-            lifeTime:10f
-            );
+            fireBullet,
+            17,
+            3f,
+            250f,
+            180f,
+            10f
+        );
     }
 
     public void SpawnTrackRocket()
@@ -178,47 +180,46 @@ public class Spawner : MonoBehaviour
     public void LJExplode()
     {
         DoExplodeShot(
-            bullet: LJBullet,
-            bulletAmount: 15,
-            moveSpeed: 3.5f,
-            rotationSpeed: 250f,
-            maxDeviantAngle: 180,
-            lifeTime: 10f);
-
+            LJBullet,
+            15,
+            3.5f,
+            250f,
+            180,
+            10f);
     }
 
     public void CommonNegrShot()
     {
         StartCoroutine(DoShot(
-            bullet: negrBullet,
-            source: AudioSources.Gun,
-            shotClip: FXClips.GunShot,
-            reloadClip: FXClips.GunReload,
-            shotTime: 0.3f,
-            shotNumber: 1,
-            shotsDelay: 0.0f,
-            bulletAmount: 7,
-            moveSpeed: 6f,
-            rotationSpeed: 0f,
-            maxDeviantAngle: 45,
-            lifeTime: 5f
-            ));
+            negrBullet,
+            AudioSources.Gun,
+            FXClips.GunShot,
+            FXClips.GunReload,
+            0.3f,
+            1,
+            0.0f,
+            7,
+            6f,
+            0f,
+            45,
+            5f
+        ));
     }
 
     public void SupplyShot()
     {
         StartCoroutine(DoShot(
-            bullet:negrBullet,
-            source: AudioSources.Gun,
-            shotClip: FXClips.GunShot,
-            reloadClip: FXClips.GunReload,
-            shotTime:0.3f,
-            shotNumber:3,
-            shotsDelay: 0.0f,
-            bulletAmount:5,
-            moveSpeed:9f,
-            rotationSpeed:0f,
-            maxDeviantAngle:20
+            negrBullet,
+            AudioSources.Gun,
+            FXClips.GunShot,
+            FXClips.GunReload,
+            0.3f,
+            3,
+            0.0f,
+            5,
+            9f,
+            0f,
+            20
         ));
     }
 }

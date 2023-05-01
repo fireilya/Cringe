@@ -1,5 +1,6 @@
 using System;
 using Assets.scripts;
+using Assets.scripts.service;
 using UnityEngine;
 
 public class TrackRocket : MonoBehaviour
@@ -11,12 +12,9 @@ public class TrackRocket : MonoBehaviour
     private Spawner explodeSpawner;
 
     [SerializeField]
-    private float lastRotation;
-
-    [SerializeField]
     private Timer lifeTimer;
 
-    private readonly float moveSpeed = 7.5f;
+    private readonly float moveSpeed = 0f;
 
     [SerializeField]
     private float neededRotation;
@@ -30,14 +28,14 @@ public class TrackRocket : MonoBehaviour
     [SerializeField]
     private MissileData data;
 
-    private readonly float rotationSpeed = 150f;
+    private readonly float rotationSpeed = 175f;
 
     private float health = 30;
 
     private void Start()
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        lifeTimer.StartTimer(5f);
+        lifeTimer.StartTimer(550f);
     }
 
     void OnTriggerEnter2D(Collider2D collider)
@@ -58,35 +56,21 @@ public class TrackRocket : MonoBehaviour
             Destroy(gameObject);
         }
 
-        SetNextRotation();
+        currentRotation = (currentRotation < 0 ? 360 + currentRotation : currentRotation) % 360;
+        neededRotation = VectorWorker.FindRotationByTarget(transform.position, playerTransform.position);
         transform.localPosition+= transform.right*moveSpeed * Time.deltaTime;
-        var v1 = currentRotation - neededRotation;
-        var v2 = 360 - Math.Abs(currentRotation - neededRotation);
+        var variant1 = currentRotation - neededRotation;
+        var variant2 = 360 - Math.Abs(currentRotation - neededRotation);
         var direction =
-            Math.Abs(v1) < Math.Abs(v2) && currentRotation - neededRotation > 0
-            || Math.Abs(v1) > Math.Abs(v2) && currentRotation - neededRotation < 0
+            Math.Abs(variant1) < Math.Abs(variant2) && currentRotation - neededRotation > 0
+            || Math.Abs(variant1) > Math.Abs(variant2) && currentRotation - neededRotation < 0
                 ? -1
                 : 1;
         currentRotation += rotationSpeed * Time.deltaTime * direction;
-        lastRotation = currentRotation is > 360 or < 0 ? lastRotation - 360 : lastRotation;
-        currentRotation = neededRotation < lastRotation
-            ? Mathf.Clamp(currentRotation, neededRotation, lastRotation)
-            : Mathf.Clamp(currentRotation, lastRotation, neededRotation);
+        currentRotation = neededRotation < currentRotation
+            ? Mathf.Clamp(currentRotation, neededRotation, currentRotation)
+            : Mathf.Clamp(currentRotation, currentRotation, neededRotation);
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, currentRotation + 180f);
     }
 
-    private void SetNextRotation()
-    {
-        currentRotation = currentRotation < 0 ? 360 + currentRotation : currentRotation;
-        currentRotation %= 360;
-        lastRotation = currentRotation;
-        var k = transform.position.x - playerTransform.position.x < 0 ? 180 : 0;
-        var aimRotationAngle = -Math.Atan(
-                                   (playerTransform.position.y - transform.position.y)
-                                   / (transform.position.x - playerTransform.position.x))
-                               * Mathf.Rad2Deg
-                               + k;
-        aimRotationAngle = aimRotationAngle < 0 ? 360 + aimRotationAngle : aimRotationAngle;
-        neededRotation = (float)aimRotationAngle;
-    }
 }
