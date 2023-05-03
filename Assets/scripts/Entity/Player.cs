@@ -66,7 +66,9 @@ public class Player : MonoBehaviour
         "FullRockets",
         "FullHealth",
         "MegaHealth",
-        "TitorBoost"
+        "TitorBoost",
+        "PopovBoost"
+
     };
 
     [SerializeField]
@@ -138,7 +140,10 @@ public class Player : MonoBehaviour
                 gameController.SetMegaHealth();
                 break;
             case "TitorBoost":
-                abilityController.ApplyTimerBoostBonus(Ability.Titor);
+                abilityController.ApplyTimerBoostBonus(AbilityIndex.Titor, 20f);
+                break;
+            case "PopovBoost":
+                abilityController.ApplyTimerBoostBonus(AbilityIndex.Popov, 15f);
                 break;
         }
         audioController.Play(AudioSources.BonusFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);

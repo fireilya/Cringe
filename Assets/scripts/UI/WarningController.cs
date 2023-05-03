@@ -12,9 +12,11 @@ public class WarningController : MonoBehaviour
     private float fallAlphaSpeed=1.2f;
 
     [SerializeField]
-    private Image RocketEmptyWarning;
+    private Image _rocketEmptyWarning;
     [SerializeField]
-    private Image TitorNotReadyWarning;
+    private Image _titorNotReadyWarning;
+    [SerializeField] 
+    private Image _popovNotReadyWarning;
     [SerializeField]
     private AudioController audioController;
 
@@ -23,8 +25,9 @@ public class WarningController : MonoBehaviour
 
     void Start()
     {
-        warnings.Add(RocketEmptyWarning);
-        warnings.Add(TitorNotReadyWarning);
+        warnings.Add(_rocketEmptyWarning);
+        warnings.Add(_titorNotReadyWarning);
+        warnings.Add(_popovNotReadyWarning);
     }
 
     // Update is called once per frame
@@ -43,14 +46,18 @@ public class WarningController : MonoBehaviour
         switch (type)
         {
             case WarningType.RocketAmmoEmpty:
-                RocketEmptyWarning.color = new Color(RocketEmptyWarning.color.r, RocketEmptyWarning.color.g,
-                    RocketEmptyWarning.color.b, 1);
+                _rocketEmptyWarning.color = new Color(_rocketEmptyWarning.color.r, _rocketEmptyWarning.color.g,
+                    _rocketEmptyWarning.color.b, 1);
                 break;
 
 
             case WarningType.TitorNotReady:
-                TitorNotReadyWarning.color = new Color(TitorNotReadyWarning.color.r, TitorNotReadyWarning.color.g,
-                    TitorNotReadyWarning.color.b, 1);
+                _titorNotReadyWarning.color = new Color(_titorNotReadyWarning.color.r, _titorNotReadyWarning.color.g,
+                    _titorNotReadyWarning.color.b, 1);
+                break;
+            case WarningType.PopovNotReady:
+                _popovNotReadyWarning.color = new Color(_popovNotReadyWarning.color.r, _popovNotReadyWarning.color.g,
+                    _popovNotReadyWarning.color.b, 1);
                 break;
 
         }

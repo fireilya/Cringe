@@ -5,17 +5,29 @@ using UnityEngine;
 public class PopovEnter : MonoBehaviour
 {
     [SerializeField]
-    private GameObject popovWithCucumber;
+    private Popov popovWithCucumber;
     [SerializeField]
-    private GameObject popovWithEgg;
+    private Popov popovWithEgg;
 
+    private static Queue<Popov> currentPopov=new();
+
+
+    public void DestroyYourself()
+    {
+        Destroy(gameObject);
+    }
     public void SpawnPopovWithCucumber()
     {
-        Instantiate(popovWithCucumber);
+        currentPopov.Enqueue(Instantiate(popovWithCucumber, transform.position, Quaternion.identity));
     }
 
     public void SpawnPopovWithEgg()
     {
-        Instantiate(popovWithEgg);
+        currentPopov.Enqueue(Instantiate(popovWithEgg, transform.position, Quaternion.identity));
+    }
+
+    public void Out()
+    {
+        Destroy(currentPopov.Dequeue().gameObject);
     }
 }

@@ -39,12 +39,14 @@ public class GameController : MonoBehaviour
 
     public void Pause()
     {
+        Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0;
         uiController.Pause();
     }
 
     public void Resume()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1;
         uiController.Resume();
     }

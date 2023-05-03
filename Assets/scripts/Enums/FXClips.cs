@@ -8,6 +8,9 @@
         PlayerLaserShoot,
         GunShot,
         GunReload,
-        Warning
+        Warning,
+        TitorReady,
+        PopovReady,
+        PopovEggReady
     }
 }

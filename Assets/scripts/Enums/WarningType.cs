@@ -9,6 +9,7 @@ namespace Assets.scripts.Enums
     public enum WarningType
     {
         RocketAmmoEmpty,
-        TitorNotReady
+        TitorNotReady,
+        PopovNotReady
     }
 }

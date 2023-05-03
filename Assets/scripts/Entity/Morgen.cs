@@ -46,6 +46,9 @@ public class Morgen : MonoBehaviour
             case "bullet":
                 Hit(1);
                 break;
+            case "Egg":
+                Hit(40);
+                break;
         }
     }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.scripts.Enums
 {
-    public enum Ability
+    public enum AbilityIndex
     {
         Titor,
         Popov

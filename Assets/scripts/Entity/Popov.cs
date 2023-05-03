@@ -9,13 +9,13 @@ public class Popov : MonoBehaviour
     private GameObject cucumber;
 
     [SerializeField]
-    private GameObject egg;
+    private Egg egg;
     [SerializeField] 
     private Transform eggSpawnPoint;
 
     private Transform morgenBack;
 
-    private GameObject cucumberInMorgen;
+    private CucumberInBack cucumberInMorgen;
 
     private bool isPursuit;
 
@@ -27,16 +27,34 @@ public class Popov : MonoBehaviour
     [SerializeField]
     private GameObject popovOut;
 
+    private Egg spawnedEgg;
+
     [SerializeField]
     private float moveSpeed = 10f;
 
     void Start()
     {
         morgenBack=GameObject.Find("MorgenBack").GetComponent<Transform>();
-        cucumberInMorgen=GameObject.Find("cucumberInMorgenBack");
+        cucumberInMorgen = GameObject.FindGameObjectWithTag("cucumberInMorgen").transform.GetChild(0).GetComponent<CucumberInBack>();
         audioSource = GetComponent<AudioSource>();
         returnCoordinates=transform.position;
     }
+
+    public void SpawnEgg()
+    {
+        spawnedEgg = Instantiate(egg, eggSpawnPoint.position, Quaternion.identity);
+    }
+
+    private void OutPopov()
+    {
+        Instantiate(popovOut, transform.position, Quaternion.identity);
+    }
+    public void LaunchEgg()
+    {
+        spawnedEgg.Launch();
+        OutPopov();
+    }
+
     public void ToggleCucumber()
     {
         cucumber.SetActive(true);
@@ -49,10 +67,18 @@ public class Popov : MonoBehaviour
 
     private void EndPursuit()
     {
-        cucumberInMorgen.SetActive(true);
+        cucumberInMorgen.gameObject.SetActive(true);
+        cucumber.SetActive(false);
         audioSource.Play();
         isPursuit=false;
         isPursuitEnded = true;
+        StartCoroutine(cucumberInMorgen.Explode());
+    }
+
+    private IEnumerator OutPopovWithCucumber()
+    {
+        yield return new WaitForSeconds(3.0f);
+        Instantiate(popovOut, transform.position, Quaternion.identity);
     }
 
     void Update()
@@ -71,10 +97,10 @@ public class Popov : MonoBehaviour
         {
             transform.position =
                 Vector3.MoveTowards(transform.position, returnCoordinates, moveSpeed * Time.deltaTime);
-            if (!audioSource.isPlaying&&transform.position==returnCoordinates)
+            if (transform.position==returnCoordinates)
             {
                 isPursuitEnded = false;
-                Instantiate(popovOut);
+                StartCoroutine(OutPopovWithCucumber());
             }
         }
     }
