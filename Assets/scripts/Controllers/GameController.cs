@@ -39,12 +39,14 @@ public class GameController : MonoBehaviour
 
     public void Pause()
     {
+        Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0;
         uiController.Pause();
     }
 
     public void Resume()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1;
         uiController.Resume();
     }
@@ -76,11 +78,13 @@ public class GameController : MonoBehaviour
 
     public void Win()
     {
+        Cursor.lockState = CursorLockMode.None;
         uiController.Win();
         Time.timeScale = 0;
     }
     public void StartGame()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         UnpackData();
         Time.timeScale = 1;
         rocketController.Reload();
@@ -90,6 +94,17 @@ public class GameController : MonoBehaviour
         player.transform.position = Vector3.zero;
         mainEnemy.ResetCurrentState(bossState);
         attackController.AllowAttack(false);
+        healthManager.UpdateHealth(playerHealthAmount);
+    }
+
+    public void SetMegaHealth()
+    {
+        ResetHealth(5);
+    }
+
+    private void ResetHealth(int health)
+    {
+        playerHealthAmount = health;
         healthManager.UpdateHealth(playerHealthAmount);
     }
 

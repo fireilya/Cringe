@@ -58,18 +58,25 @@ public class Player : MonoBehaviour
     private string[] goodTags = {
         "rocket",
         "bullet",
+        "Titor"
     };
 
     private string[] bonusTags =
     {
         "FullRockets",
-        "FullHealth"
+        "FullHealth",
+        "MegaHealth",
+        "TitorBoost",
+        "PopovBoost"
+
     };
 
     [SerializeField]
     private Sprite unhittablePlayerSprite;
     [SerializeField]
     private Sprite normalPlayerSprite;
+    [SerializeField]
+    private AbilityController abilityController;
     private SpriteRenderer playerSpriteRenderer;
 
     private void KeepInBorder()
@@ -109,7 +116,7 @@ public class Player : MonoBehaviour
             case ColliderIdentifier.good:
                 return;
             case ColliderIdentifier.bad: 
-                Hit();
+                //Hit();
                 break;
             case ColliderIdentifier.bonus:
                 ApplyBonus(collider.tag);
@@ -128,6 +135,15 @@ public class Player : MonoBehaviour
                 break;
             case "FullRockets":
                 rocketController.Reload();
+                break;
+            case "MegaHealth":
+                gameController.SetMegaHealth();
+                break;
+            case "TitorBoost":
+                abilityController.ApplyTimerBoostBonus(AbilityIndex.Titor, 20f);
+                break;
+            case "PopovBoost":
+                abilityController.ApplyTimerBoostBonus(AbilityIndex.Popov, 15f);
                 break;
         }
         audioController.Play(AudioSources.BonusFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);
@@ -264,8 +280,8 @@ public class Player : MonoBehaviour
             gyperJumpCulDownTimer.StartTimer(gyperJumpCulDownTime);
             unhitableTimer.StartTimer(0.35f);
         }
-        
-        if (Input.GetMouseButton(1) && !rocketController.IsEmpty)
+
+        if (Input.GetMouseButtonDown(1))
         {
             rocketController.LaunchRocket();
         }

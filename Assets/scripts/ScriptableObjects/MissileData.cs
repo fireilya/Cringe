@@ -8,6 +8,7 @@ public class MissileData : ScriptableObject
     {
         { "rocket", 50 },
         {"bullet", 5},
-        {"ExplosionRadius", 30}
+        {"ExplosionRadius", 30},
+        {"Egg", 40}
     };
 }

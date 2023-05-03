@@ -7,6 +7,10 @@
         RocketReload,
         PlayerLaserShoot,
         GunShot,
-        GunReload
+        GunReload,
+        Warning,
+        TitorReady,
+        PopovReady,
+        PopovEggReady
     }
 }
