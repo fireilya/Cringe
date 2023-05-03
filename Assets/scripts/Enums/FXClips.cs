@@ -7,6 +7,7 @@
         RocketReload,
         PlayerLaserShoot,
         GunShot,
-        GunReload
+        GunReload,
+        Warning
     }
 }

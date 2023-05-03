@@ -5,6 +5,7 @@
         Music,
         PlayerFX,
         Gun,
-        BonusFX
+        BonusFX,
+        UIFX
     }
 }

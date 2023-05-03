@@ -29,7 +29,7 @@ public class Morgen : MonoBehaviour
     public void Hit(int damage)
     {
         health -= damage;
-        if (health<0)
+        if (health<=0)
         {
             gameController.Win();
         }

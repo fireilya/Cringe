@@ -14,32 +14,31 @@ public class RocketController : MonoBehaviour
     [SerializeField]
     private Player player;
 
-    [SerializeField]
-    private TMP_Text rocketCountText;
     private Rocket spawnedRocket;
     private Timer rocketCulDownTimer;
     private int currentRocketCount;
     private int rocketCount=10;
     private float RocketCulDown=1.0f;
     [SerializeField]
-    private Image rocketImage;
-    public bool IsEmpty { get; private set; } = true;
+    private Image InactiveRocketIcon;
+    private bool isEmpty=true;
 
     [SerializeField]
     private Transform rocketSpawnerTransform;
 
     [SerializeField]
     private AudioController audioController;
+    [SerializeField]
+    private WarningController warningController;
 
     public void Reload()
     {
         currentRocketCount = rocketCount;
-        rocketCountText.text = "X" + currentRocketCount;
+        InactiveRocketIcon.fillAmount = 0;
     }
     void Start()
     {
         rocketCulDownTimer = Instantiate(mainTimer);
-        rocketImage.fillAmount = 0;
     }
 
 
@@ -48,9 +47,8 @@ public class RocketController : MonoBehaviour
         switch (rocketCulDownTimer.IsEnded)
         {
             case false:
-                rocketImage.fillAmount = 1 - rocketCulDownTimer.Progress;
                 break;
-            case true when IsEmpty && currentRocketCount > 0:
+            case true when isEmpty && currentRocketCount > 0:
                 CreateRocket();
                 break;
         }
@@ -60,21 +58,23 @@ public class RocketController : MonoBehaviour
     {
         audioController.Play(AudioSources.PlayerFX, FXClips.RocketReload);
         spawnedRocket = Instantiate(mainRocket, rocketSpawnerTransform.position, player.transform.rotation);
-        spawnedRocket.Engine = spawnedRocket.transform.GetChild(0).gameObject;
         spawnedRocket.gameObject.transform.parent = player.transform;
-        IsEmpty = false;
+        isEmpty = false;
     }
 
     public void LaunchRocket()
     {
-        spawnedRocket.Engine.SetActive(true);
+        if (isEmpty)
+        {
+            warningController.ThrowWarning(WarningType.RocketAmmoEmpty);
+            return;
+        }
         spawnedRocket.tag = "rocket";
         spawnedRocket.gameObject.transform.parent = null;
         spawnedRocket.Launch();
         rocketCulDownTimer.StartTimer(RocketCulDown);
         currentRocketCount--;
-        IsEmpty=true;
-        rocketCountText.text = "X" + currentRocketCount;
-        rocketImage.fillAmount = 1;
+        isEmpty=true;
+        InactiveRocketIcon.fillAmount = 1-((float)currentRocketCount/rocketCount);
     }
 }

@@ -32,7 +32,7 @@ public class Spawner : MonoBehaviour
     private GameObject source;
 
     [SerializeField]
-    private TrackRocket trackRocket;
+    private ConstantSpeedRocket trackRocket;
 
 
     private IEnumerator DoMultyExplodeShot(

@@ -41,6 +41,7 @@ public class LoseScreen : UIController
             RestartGame();
             yield break;
         }
+        Cursor.lockState = CursorLockMode.None;
         UIModeFromTo(loseScreen.gameObject, gameOverScreen.gameObject);
 
     }

@@ -7,8 +7,8 @@ public class Rocket : MonoBehaviour
 {
     [SerializeField, FormerlySerializedAs("lifeTimer")]
     private Timer lifeTimer;
-    public GameObject Engine;
-    private float timer;
+    [SerializeField, FormerlySerializedAs("Engine")]
+    private GameObject engine;
 
     [SerializeField]
     private GameObject explosionRadius;
@@ -17,16 +17,21 @@ public class Rocket : MonoBehaviour
     private bool isRocketLaunced;
     private float boost = 15.0f;
     private AudioSource rocketAudioSource;
+    [SerializeField]
+    private bool isDestructible;
 
 
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.tag == "missileObstacle" && tag=="rocket")
+        if (tag=="rocket")
         {
-            Instantiate(explosionRadius, transform.localPosition, Quaternion.identity);
-            Destroy(lifeTimer);
-            Destroy(gameObject);
+            if (collider.tag == "missileObstacle" && isDestructible || collider.gameObject.name is "Morgen" or "MorgenMouth")
+            {
+                Instantiate(explosionRadius, transform.position, Quaternion.identity);
+                Destroy(lifeTimer);
+                Destroy(gameObject);
+            }
         }
 
     }
@@ -48,6 +53,7 @@ public class Rocket : MonoBehaviour
 
     public void Launch()
     {
+        engine.SetActive(true);
         rocketAudioSource.Play();
         isRocketLaunced=true;
         var poligonColider=this.AddComponent<PolygonCollider2D>();
@@ -60,7 +66,7 @@ public class Rocket : MonoBehaviour
     {
         if (isRocketLaunced)
         {
-            rb.AddForce(Vector2.right * boost);
+            rb.AddRelativeForce(Vector2.right * boost);
         }
     }
 }
