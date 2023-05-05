@@ -10,7 +10,6 @@ public class Spawner : MonoBehaviour
 
     private readonly int supplyShotBulletAmount = 5;
 
-    [SerializeField]
     private AudioController audioController;
 
     [SerializeField]
@@ -18,6 +17,8 @@ public class Spawner : MonoBehaviour
 
     [SerializeField]
     private EnemyBullet LJBullet;
+    [SerializeField] 
+    private EnemyBullet EyeBullet;
 
     [SerializeField]
     private LJRocket LJRocket;
@@ -34,6 +35,11 @@ public class Spawner : MonoBehaviour
     [SerializeField]
     private ConstantSpeedRocket trackRocket;
 
+
+    void Start()
+    {
+        audioController = FindAnyObjectByType<AudioController>();
+    }
 
     private IEnumerator DoMultyExplodeShot(
         EnemyBullet bullet,
@@ -140,6 +146,17 @@ public class Spawner : MonoBehaviour
     private void SpawnSingleRocket(GameObject rocket)
     {
         Instantiate(rocket, transform.position, Quaternion.Euler(0, 0, 90));
+    }
+
+    public void EyeExplode()
+    {
+        DoExplodeShot(
+            EyeBullet, 
+            20, 
+            6f, 
+            200f, 
+            180, 
+            6f);
     }
 
     public void FireExplode()

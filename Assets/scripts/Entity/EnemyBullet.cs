@@ -21,6 +21,12 @@ public class EnemyBullet : MonoBehaviour
         if (data.DamageData.ContainsKey(collider.tag))
         {
             health -= data.DamageData[collider.tag];
+            return;
+        }
+
+        if (collider.tag=="Popov")
+        {
+            Destroy(gameObject);
         }
     }
     public void Setup(Vector2 direction, float moveSpeed, float rotationSpeed, float lifeTime)

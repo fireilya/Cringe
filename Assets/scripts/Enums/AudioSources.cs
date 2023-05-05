@@ -6,6 +6,6 @@
         PlayerFX,
         Gun,
         BonusFX,
-        UIFX
+        UIFX,
     }
 }

@@ -17,6 +17,8 @@ public class RotationTracker : MonoBehaviour
 
     [SerializeField]
     private string targetTag;
+
+    public bool isEnable;
     void Start()
     {
         target = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
@@ -25,6 +27,7 @@ public class RotationTracker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isEnable) return;
         currentRotation = (currentRotation < 0 ? 360 + currentRotation : currentRotation) % 360;
         neededRotation = VectorWorker.FindRotationByTarget(transform.position, target.position);
         currentRotation =
