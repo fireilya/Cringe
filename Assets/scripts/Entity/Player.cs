@@ -116,7 +116,7 @@ public class Player : MonoBehaviour
             case ColliderIdentifier.good:
                 return;
             case ColliderIdentifier.bad: 
-                //Hit();
+                Hit();
                 break;
             case ColliderIdentifier.bonus:
                 ApplyBonus(collider.tag);

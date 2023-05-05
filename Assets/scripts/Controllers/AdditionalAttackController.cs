@@ -41,7 +41,11 @@ public class AdditionalAttackController : MonoBehaviour
             var newAttack = random.Next() % attacks.Length;
             attacks[newAttack].Play();
             currentAttack = attacks[newAttack];
-            isAttackAllowed=false;
+
+            //attacks[1].Play();
+            //currentAttack = attacks[1];
+
+            isAttackAllowed = false;
         }
     }
 }
