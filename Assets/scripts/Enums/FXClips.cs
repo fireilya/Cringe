@@ -11,6 +11,7 @@
         Warning,
         TitorReady,
         PopovReady,
-        PopovEggReady
+        PopovEggReady,
+        BazukaShot
     }
 }

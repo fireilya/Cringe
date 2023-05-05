@@ -110,7 +110,7 @@ public class GameController : MonoBehaviour
 
     public void ResetHealth()
     {
-        playerHealthAmount = 3;
+        playerHealthAmount = playerHealthAmount<3?3:playerHealthAmount;
         healthManager.UpdateHealth(playerHealthAmount);
     }
     public void EndGame()

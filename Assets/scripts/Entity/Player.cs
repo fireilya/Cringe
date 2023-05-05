@@ -58,7 +58,10 @@ public class Player : MonoBehaviour
     private string[] goodTags = {
         "rocket",
         "bullet",
-        "Titor"
+        "Titor",
+        "Popov",
+        "Egg",
+
     };
 
     private string[] bonusTags =

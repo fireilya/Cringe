@@ -21,7 +21,7 @@ public class AdditionalAttackController : MonoBehaviour
 
     public void AllowAttack(bool isStop)
     {
-        attackTimer.StartTimer(1f);
+        attackTimer.StartTimer(random.Next(3, 10));
         isAttackAllowed=true;
         if (isStop)
         {

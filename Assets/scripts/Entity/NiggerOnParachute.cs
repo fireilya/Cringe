@@ -64,7 +64,7 @@ public class NiggerOnParachute : MonoBehaviour
 
     private void DoRandomLaugh()
     {
-        if (niggerAudioSource.isPlaying || rnd.Next() % 1200 != 0) return;
+        if (niggerAudioSource.isPlaying || rnd.Next() % 3912 != 0) return;
         niggerAudioSource.volume = 0.8f;
         niggerAudioSource.clip = niggerLaughClip;
         StartCoroutine(ShowLaughIcon());
@@ -102,10 +102,11 @@ public class NiggerOnParachute : MonoBehaviour
         DoRandomLaugh();
         if (health<=0)
         {
-            var nextBonus=rand.Next();
-            if (nextBonus % 5 == 0)
+            var nextBonus = rand.Next();
+            var accessDouble = rand.NextDouble();
+            if (accessDouble > 0.6 || bonuses[nextBonus % bonuses.Length].tag=="MegaHealth" && accessDouble>0.85)
             { 
-                Instantiate(bonuses[nextBonus%bonuses.Length], transform.localPosition, Quaternion.identity);
+                Instantiate(bonuses[nextBonus % bonuses.Length], transform.localPosition, Quaternion.identity);
             }
             Destroy(gameObject);
         }

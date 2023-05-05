@@ -7,5 +7,6 @@
         Gun,
         BonusFX,
         UIFX,
+        Bazuka
     }
 }
