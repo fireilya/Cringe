@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         "Titor",
         "Popov",
         "Egg",
-
+        "CleaningShield"
     };
 
     private string[] bonusTags =
@@ -70,8 +70,8 @@ public class Player : MonoBehaviour
         "FullHealth",
         "MegaHealth",
         "TitorBoost",
-        "PopovBoost"
-
+        "PopovBoost",
+        "CleanerBoost"
     };
 
     [SerializeField]
@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
             case ColliderIdentifier.good:
                 return;
             case ColliderIdentifier.bad: 
-                //Hit();
+                Hit();
                 break;
             case ColliderIdentifier.bonus:
                 ApplyBonus(collider.tag);
@@ -147,6 +147,9 @@ public class Player : MonoBehaviour
                 break;
             case "PopovBoost":
                 abilityController.ApplyTimerBoostBonus(AccumulateAbilityIndex.Popov, 15f);
+                break;
+            case "CleanerBoost":
+                abilityController.ApplyTimerBoostBonus(AccumulateAbilityIndex.CleaningShield, 20f);
                 break;
         }
         audioController.Play(AudioSources.BonusFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);

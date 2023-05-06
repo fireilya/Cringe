@@ -12,6 +12,7 @@
         TitorReady,
         PopovReady,
         PopovEggReady,
-        BazukaShot
+        BazukaShot,
+        CleanerReady
     }
 }

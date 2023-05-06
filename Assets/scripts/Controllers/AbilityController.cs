@@ -61,12 +61,12 @@ public class AbilityController : MonoBehaviour
     {
         data = new AbilityData[]
         {
-            new(10, AudioSources.TitorNotification, FXClips.TitorReady, titorInactiveIcon)
+            new(100, AudioSources.TitorNotification, FXClips.TitorReady, titorInactiveIcon)
         };
         accumulateData = new AccumulateAbilityData[]
         {
-            new(3, 3, AudioSources.PopovNotification, FXClips.PopovReady, FXClips.PopovEggReady, popovEggs),
-            new(4, 3, AudioSources.CleanerNotification, FXClips.GunShot, FXClips.GunReload, cleaners)
+            new(30, 3, AudioSources.PopovNotification, FXClips.PopovReady, FXClips.PopovEggReady, popovEggs),
+            new(20, 3, AudioSources.CleanerNotification, FXClips.CleanerReady, FXClips.CleanerReady, cleaners)
         };
     }
 

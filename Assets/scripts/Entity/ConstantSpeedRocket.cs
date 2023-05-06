@@ -23,7 +23,7 @@ public class ConstantSpeedRocket : MonoBehaviour
     private MissileData data;
 
 
-    private float health = 30;
+    private float health = 25;
 
 
     private void Start()
