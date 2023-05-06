@@ -104,7 +104,6 @@ public class GameController : MonoBehaviour
         rocketController.Reload();
         player.gameObject.SetActive(true);
         attackController.AllowFirstAttack();
-        mainEnemy.StartBuilding(1.0f);
         playerHealthAmount = 3;
         player.transform.position = Vector3.zero;
         stateController.SetTransitionAttack(bossState);

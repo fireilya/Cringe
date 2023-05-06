@@ -21,16 +21,15 @@ public class StateController : MonoBehaviour
     public void SetTransitionAttack(int state)
     {
         morgen.ChangeMorgenHittableState(false);
+        morgen.SetStateHealth(state);
         if (state == 0)
         {
+            morgen.StartBuilding(1.0f);
             SetState(state);
             return;
         }
-
         attackController.NextTransitionAttack = state - 1;
         attackController.IsStateTransitionAttack = true;
-        attackController.NextTransitionAttack = state - 1;
-        morgen.SetStateHealth(state);
     }
 
     public void SetState(int state)
@@ -41,6 +40,7 @@ public class StateController : MonoBehaviour
             case 0:
                 audioController.Play(AudioSources.Music, Music.Celerity);
                 attackController.AttackAmount = 4;
+                healthMarker.SetActive(true);
                 break;
             case 1:
                 audioController.Play(AudioSources.Music, Music.Pursuit);

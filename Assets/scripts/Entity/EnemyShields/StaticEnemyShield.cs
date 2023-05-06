@@ -80,6 +80,7 @@ public class StaticEnemyShield : MonoBehaviour
         if (currentHealth <= 0)
         {
             Destroy(gameObject, 3f);
+            transform.parent=null;
             isDestroyed = true;
         }
     }
