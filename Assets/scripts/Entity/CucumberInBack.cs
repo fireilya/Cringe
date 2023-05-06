@@ -1,23 +1,23 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class CucumberInBack : MonoBehaviour
 {
     private AudioSource audioSource;
-    private SpriteRenderer spriteRenderer;
-    [SerializeField]
-    private Sprite commonCucumber;
 
     [SerializeField]
-    private Sprite redCucumber;
+    private Sprite commonCucumber;
 
     [SerializeField]
     private GameObject explode;
 
     [SerializeField]
     private Morgen morgen;
+
+    [SerializeField]
+    private Sprite redCucumber;
+
+    private SpriteRenderer spriteRenderer;
 
     public IEnumerator Explode()
     {

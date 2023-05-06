@@ -10,6 +10,6 @@
         Bazuka,
         PopovNotification,
         TitorNotification,
-        CleanerNotification,
+        CleanerNotification
     }
 }

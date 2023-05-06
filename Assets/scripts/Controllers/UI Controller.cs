@@ -6,19 +6,23 @@ public class UIController : MonoBehaviour
 {
     [SerializeField]
     protected GameOverScreen gameOverScreen;
-    [SerializeField]
-    protected LoseScreen loseScreen;
-    [SerializeField]
-    protected StartScreen startScreen;
+
     [SerializeField]
     protected GameScreen gameScreen;
+
     [SerializeField]
-    protected WinScreen winScreen;
+    protected LoseScreen loseScreen;
 
     [SerializeField]
     protected PauseScreen pauseScreen;
 
-    private List<GameObject> screens=new();
+    private List<GameObject> screens = new();
+
+    [SerializeField]
+    protected StartScreen startScreen;
+
+    [SerializeField]
+    protected WinScreen winScreen;
 
     protected void RestartGame()
     {
@@ -37,20 +41,22 @@ public class UIController : MonoBehaviour
         loseScreen.gameObject.SetActive(true);
         loseScreen.Lose(currentLife);
     }
+
     public void Resume()
     {
         pauseScreen.gameObject.SetActive(false);
         gameScreen.gameObject.SetActive(true);
     }
+
     public void Pause()
     {
         pauseScreen.gameObject.SetActive(true);
         gameScreen.gameObject.SetActive(false);
     }
+
     protected void UIModeFromTo(GameObject from, GameObject to)
     {
         from.SetActive(false);
         to.SetActive(true);
     }
-
 }

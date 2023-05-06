@@ -9,17 +9,14 @@ public class ConstantRotation : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (IsEnable)
-        {
-            transform.Rotate(Vector3.forward, _rotationSpeed*Time.deltaTime);
-        }
+        if (IsEnable) transform.Rotate(Vector3.forward, _rotationSpeed * Time.deltaTime);
     }
 
     public void EnableRotation(float rotationSpeed)
     {
-        IsEnable=true;
-        _rotationSpeed=rotationSpeed;
+        IsEnable = true;
+        _rotationSpeed = rotationSpeed;
     }
 }

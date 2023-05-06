@@ -1,21 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PostAudioSource : MonoBehaviour
 {
     private AudioSource source;
-    void Start()
+
+    private void Start()
     {
-        source=GetComponent<AudioSource>();
+        source = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (!source.isPlaying)
-        {
-            Destroy(gameObject);
-        }
+        if (!source.isPlaying) Destroy(gameObject);
     }
 }

@@ -2,21 +2,18 @@ using UnityEngine;
 
 public class ExplosionRadius : MonoBehaviour
 {
+    private readonly float fallSpeed = 1.2f;
     private SpriteRenderer sprite;
-    private float fallSpeed = 1.2f;
-    void Start()
+
+    private void Start()
     {
-        sprite=GetComponent<SpriteRenderer>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b,
             sprite.color.a - fallSpeed * Time.deltaTime);
-        if (sprite.color.a<=0)
-        {
-            Destroy(gameObject);
-        }
+        if (sprite.color.a <= 0) Destroy(gameObject);
     }
 }

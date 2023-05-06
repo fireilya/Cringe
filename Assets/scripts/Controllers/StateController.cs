@@ -1,22 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using Assets.scripts.Enums;
 using UnityEngine;
 
 public class StateController : MonoBehaviour
 {
     [SerializeField]
-    private AttackController attackController;
-    [SerializeField]
     private AdditionalAttackController additionalAttackController;
+
     [SerializeField]
-    private Morgen morgen;
+    private AttackController attackController;
+
     [SerializeField]
     private AudioController audioController;
 
     [SerializeField]
     private GameObject healthMarker;
+
+    [SerializeField]
+    private Morgen morgen;
+
     public void SetTransitionAttack(int state)
     {
         morgen.ChangeMorgenHittableState(false);
@@ -25,9 +26,10 @@ public class StateController : MonoBehaviour
             SetState(state);
             return;
         }
+
         attackController.NextTransitionAttack = state - 1;
-        attackController.IsStateTransitionAttack=true;
-        attackController.NextTransitionAttack=state-1;
+        attackController.IsStateTransitionAttack = true;
+        attackController.NextTransitionAttack = state - 1;
         morgen.SetStateHealth(state);
     }
 
@@ -51,6 +53,7 @@ public class StateController : MonoBehaviour
                 audioController.Play(AudioSources.Music, Music.Realistic);
                 break;
         }
+
         attackController.AllowAttack(false);
     }
 

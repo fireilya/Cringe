@@ -7,8 +7,8 @@ public class MissileData : ScriptableObject
     public Dictionary<string, int> DamageData = new()
     {
         { "rocket", 50 },
-        {"bullet", 1},
-        {"ExplosionRadius", 30},
-        {"Egg", 40}
+        { "bullet", 1 },
+        { "ExplosionRadius", 30 },
+        { "Egg", 40 }
     };
 }

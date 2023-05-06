@@ -8,14 +8,15 @@ public class AudioController : MonoBehaviour
     private AudioSource[] audioSources;
 
     [SerializeField]
-    private AudioClip[] musicAudioClips;
-
-    [SerializeField]
     private AudioClip[] FXAudioClips;
+
     [SerializeField]
     private AudioMixerGroup[] mixerGroups;
 
-    public void Play(AudioSources source, FXClips FX, AudioMixerOutputGroups group=AudioMixerOutputGroups.NormalClips)
+    [SerializeField]
+    private AudioClip[] musicAudioClips;
+
+    public void Play(AudioSources source, FXClips FX, AudioMixerOutputGroups group = AudioMixerOutputGroups.NormalClips)
     {
         var requiredAudioSource = audioSources[(int)source];
         if (requiredAudioSource.gameObject.activeSelf)
@@ -26,7 +27,8 @@ public class AudioController : MonoBehaviour
         }
     }
 
-    public void Play(AudioSources source, Music music, AudioMixerOutputGroups group = AudioMixerOutputGroups.NormalClips)
+    public void Play(AudioSources source, Music music,
+        AudioMixerOutputGroups group = AudioMixerOutputGroups.NormalClips)
     {
         var requiredAudioSource = audioSources[(int)source];
         if (requiredAudioSource.gameObject.activeSelf)

@@ -1,21 +1,22 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PopovEnter : MonoBehaviour
 {
+    private static readonly Queue<Popov> popovsToDestroy = new();
+
     [SerializeField]
     private Popov popovWithCucumber;
+
     [SerializeField]
     private Popov popovWithEgg;
-
-    private static Queue<Popov> popovsToDestroy=new();
 
 
     public void DestroyYourself()
     {
         Destroy(gameObject);
     }
+
     public void SpawnPopovWithCucumber()
     {
         popovsToDestroy.Enqueue(Instantiate(popovWithCucumber, transform.position, Quaternion.identity));

@@ -2,6 +2,7 @@ public static class GameDataContainer
 {
     public static int BossState;
     public static int PlayerCurrentLife;
+
     public static void PackContainer(int state, int currentLife)
     {
         BossState = state;
@@ -10,7 +11,7 @@ public static class GameDataContainer
 
     public static void ResetContainer()
     {
-        BossState=0; 
-        PlayerCurrentLife=0;
+        BossState = 0;
+        PlayerCurrentLife = 0;
     }
 }

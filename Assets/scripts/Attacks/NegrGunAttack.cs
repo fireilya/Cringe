@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using Assets.scripts;
-using Assets.scripts.Enums;
 using Assets.scripts.Interfaces;
 using Assets.scripts.service;
 using UnityEngine;
@@ -14,30 +12,31 @@ public class NegrGunAttack : MonoBehaviour, IAttack
     private AttackController attackController;
 
     [SerializeField]
+    private AudioController audioController;
+
+    private float currentRotation;
+
+    [SerializeField]
     private Animator enemyAnimator;
 
     [SerializeField]
     private Transform gun;
 
-    private float neededRotation;
+    private bool isRotationSetted;
 
-    [SerializeField]
-    private Transform playerTransform;
+    private float neededRotation;
 
     [SerializeField]
     private Spawner negrSpawner;
 
     [SerializeField]
-    private AudioController audioController;
-
-    private float currentRotation;
-    private bool isRotationSetted;
+    private Transform playerTransform;
 
 
     public void StartAttack()
     {
         enemyAnimator.SetBool("Common", false);
-        gun.eulerAngles=new Vector3(gun.eulerAngles.x, gun.eulerAngles.y, 0);
+        gun.eulerAngles = new Vector3(gun.eulerAngles.x, gun.eulerAngles.y, 0);
         currentRotation = 0;
         SetNextRotation();
         gun.gameObject.SetActive(true);
@@ -55,16 +54,9 @@ public class NegrGunAttack : MonoBehaviour, IAttack
         attackController.AllowAttack(false);
     }
 
-    public IEnumerator DelayShot()
-    {
-        negrSpawner.CommonNegrShot(7);
-        yield return new WaitForSeconds(0.5f);
-        SetNextRotation();
-    }
-
     public void EndPhase()
     {
-        isRotationSetted=false;
+        isRotationSetted = false;
         currentPhaseCount++;
         if (currentPhaseCount == neededPhaseCount)
         {
@@ -85,6 +77,13 @@ public class NegrGunAttack : MonoBehaviour, IAttack
     public int neededPhaseCount { get; set; }
     public int currentPhaseCount { get; set; }
 
+    public IEnumerator DelayShot()
+    {
+        negrSpawner.CommonNegrShot(7);
+        yield return new WaitForSeconds(0.5f);
+        SetNextRotation();
+    }
+
     private void Update()
     {
         if (isAttackStarted && isRotationSetted)
@@ -94,12 +93,10 @@ public class NegrGunAttack : MonoBehaviour, IAttack
             currentRotation =
                 VectorWorker.RotateToTargetWithSpeed(currentRotation, neededRotation, _rotationSpeed * Time.deltaTime);
             gun.eulerAngles = new Vector3(gun.eulerAngles.x, gun.eulerAngles.y, currentRotation);
-            if (Math.Abs(currentRotation - neededRotation) < 1e-3)
-            {
-                EndPhase();
-            }
+            if (Math.Abs(currentRotation - neededRotation) < 1e-3) EndPhase();
         }
     }
+
     private void SetNextRotation()
     {
         currentRotation = currentRotation < 0 ? 360 + currentRotation : currentRotation;

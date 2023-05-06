@@ -4,13 +4,15 @@ using UnityEngine.UI;
 
 public class LoseScreen : UIController
 {
-    [SerializeField]
-    private Image[] _lifes;
-    [SerializeField]
-    private Sprite _loseLife;
     private AudioSource _audioSource;
 
-    void Start()
+    [SerializeField]
+    private Image[] _lifes;
+
+    [SerializeField]
+    private Sprite _loseLife;
+
+    private void Start()
     {
         _audioSource = gameObject.GetComponent<AudioSource>();
     }
@@ -22,10 +24,7 @@ public class LoseScreen : UIController
 
     private void UpdateLoseSprites(int currentLife)
     {
-        for (var i = 0; i < currentLife; i++)
-        {
-            _lifes[i].sprite = _loseLife;
-        }
+        for (var i = 0; i < currentLife; i++) _lifes[i].sprite = _loseLife;
     }
 
     private IEnumerator LostLife(int currentLife)
@@ -36,13 +35,13 @@ public class LoseScreen : UIController
         _lifes[currentLife].sprite = _loseLife;
         _audioSource.Play();
         yield return new WaitForSeconds(3.16f);
-        if (currentLife!=2)
+        if (currentLife != 2)
         {
             RestartGame();
             yield break;
         }
+
         Cursor.lockState = CursorLockMode.None;
         UIModeFromTo(loseScreen.gameObject, gameOverScreen.gameObject);
-
     }
 }

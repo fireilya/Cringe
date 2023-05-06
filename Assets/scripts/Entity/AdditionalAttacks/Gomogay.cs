@@ -1,40 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Playables;
 
 public class Gomogay : MonoBehaviour
 {
-    private Rigidbody2D gomoRB;
-    private SpriteRenderer spriteRenderer;
-
-    [SerializeField]
-    private Transform spawnPoint;
-    private Transform playerTransform;
-    private Vector2 outDirection;
-    [SerializeField]
-    private Sprite eye;
-    [SerializeField]
-    private Sprite gomogay;
     [SerializeField]
     private int attackState;
 
     [SerializeField]
-    private float boostStrength=45;
-
-    [SerializeField]
-    private float outBoostStrength = 90;
-    [SerializeField]
-    private RotationTracker rotationTracker;
-
-    private PlayableDirector firstAttack;
-    private PlayableDirector secondAttack;
-    private PlayableDirector thirdAttack;
+    private readonly float boostStrength = 45;
 
     [SerializeField]
     private ConstantRotation constantRotation;
-    
+
+    [SerializeField]
+    private Sprite eye;
+
+    private PlayableDirector firstAttack;
+
+    [SerializeField]
+    private Sprite gomogay;
+
+    private Rigidbody2D gomoRB;
+
+    [SerializeField]
+    private readonly float outBoostStrength = 90;
+
+    private Vector2 outDirection;
+    private Transform playerTransform;
+
+    [SerializeField]
+    private RotationTracker rotationTracker;
+
+    private PlayableDirector secondAttack;
+
+    [SerializeField]
+    private Transform spawnPoint;
+
+    private SpriteRenderer spriteRenderer;
+    private PlayableDirector thirdAttack;
 
 
     public void SetNextState()
@@ -43,13 +46,13 @@ public class Gomogay : MonoBehaviour
         switch (attackState)
         {
             case 1:
-                rotationTracker.isEnable=true;
+                rotationTracker.isEnable = true;
                 firstAttack.Play();
                 break;
             case 2:
-                rotationTracker.isEnable=false;
-                gomoRB.velocity=Vector2.zero;
-                spriteRenderer.sprite=eye;
+                rotationTracker.isEnable = false;
+                gomoRB.velocity = Vector2.zero;
+                spriteRenderer.sprite = eye;
                 secondAttack.Play();
                 break;
             case 3:
@@ -61,44 +64,37 @@ public class Gomogay : MonoBehaviour
                 var temp = playerTransform.position - transform.position;
                 outDirection = new Vector2(temp.x, temp.y).normalized;
                 break;
-            
         }
     }
-    void Start()
+
+    private void Start()
     {
-        gomoRB=GetComponent<Rigidbody2D>();
-        spriteRenderer=GetComponent<SpriteRenderer>();
+        gomoRB = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         playerTransform = GameObject.FindWithTag("Player").GetComponent<Transform>();
         firstAttack = GameObject.Find("FirstAttack").GetComponent<PlayableDirector>();
         secondAttack = GameObject.Find("SecondAttack").GetComponent<PlayableDirector>();
-        thirdAttack= GameObject.Find("ThirdAttack").GetComponent<PlayableDirector>();
+        thirdAttack = GameObject.Find("ThirdAttack").GetComponent<PlayableDirector>();
     }
 
     public void EndGomogayAttack()
     {
         gomoRB.angularVelocity = 0;
-        transform.position=spawnPoint.position;
-        transform.rotation=Quaternion.identity;
-        gomoRB.velocity=Vector2.zero;
+        transform.position = spawnPoint.position;
+        transform.rotation = Quaternion.identity;
+        gomoRB.velocity = Vector2.zero;
         constantRotation.IsEnable = false;
         attackState = 0;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if (attackState == 1)
-        {
-            gomoRB.AddRelativeForce(Vector2.up*boostStrength);
-        }
+        if (attackState == 1) gomoRB.AddRelativeForce(Vector2.up * boostStrength);
 
-        if (attackState == 4)
-        {
-            gomoRB.AddForce(outDirection*outBoostStrength);
-        }
+        if (attackState == 4) gomoRB.AddForce(outDirection * outBoostStrength);
     }
 
-    void Update()
+    private void Update()
     {
-        
     }
 }

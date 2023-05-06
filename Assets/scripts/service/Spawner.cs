@@ -8,25 +8,26 @@ public class Spawner : MonoBehaviour
 {
     private readonly float maxSupplyShotDeviantAngle = 20f;
 
+    private readonly Random rnd = new();
+
     private readonly int supplyShotBulletAmount = 5;
 
     private AudioController audioController;
+
+    [SerializeField]
+    private EnemyBullet EyeBullet;
 
     [SerializeField]
     private EnemyBullet fireBullet;
 
     [SerializeField]
     private EnemyBullet LJBullet;
-    [SerializeField] 
-    private EnemyBullet EyeBullet;
 
     [SerializeField]
     private LJRocket LJRocket;
 
     [SerializeField]
     private EnemyBullet negrBullet;
-
-    private readonly Random rnd = new();
 
     [SerializeField]
     [FormerlySerializedAs("gun")]
@@ -36,7 +37,7 @@ public class Spawner : MonoBehaviour
     private ConstantSpeedRocket trackRocket;
 
 
-    void Start()
+    private void Start()
     {
         audioController = FindAnyObjectByType<AudioController>();
     }
@@ -151,11 +152,11 @@ public class Spawner : MonoBehaviour
     public void EyeExplode()
     {
         DoExplodeShot(
-            EyeBullet, 
-            20, 
-            6f, 
-            200f, 
-            180, 
+            EyeBullet,
+            20,
+            6f,
+            200f,
+            180,
             6f);
     }
 

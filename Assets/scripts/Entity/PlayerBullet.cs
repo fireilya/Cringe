@@ -4,16 +4,18 @@ using UnityEngine.Serialization;
 
 public class PlayerBullet : MonoBehaviour
 {
-    private float bulletSpeed = 30f;
+    private readonly float bulletSpeed = 30f;
 
-    [SerializeField, FormerlySerializedAs("mainTimer")]
+    [SerializeField]
+    [FormerlySerializedAs("mainTimer")]
     private Timer lifeTimer;
-    void Start()
+
+    private void Start()
     {
         lifeTimer.StartTimer(1.0f);
     }
 
-    void OnTriggerEnter2D(Collider2D collider)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.tag == "missileObstacle")
         {
@@ -23,9 +25,9 @@ public class PlayerBullet : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        transform.localPosition+=Vector3.right*Time.deltaTime*bulletSpeed;
+        transform.localPosition += Vector3.right * Time.deltaTime * bulletSpeed;
         if (lifeTimer.IsEnded)
         {
             Destroy(lifeTimer);

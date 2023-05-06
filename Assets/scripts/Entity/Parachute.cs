@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class Parachute : MonoBehaviour
 {
-    [SerializeField]
-    private NiggerOnParachute nigger;
-
-    private string[] destroyTags =
+    private readonly string[] destroyTags =
     {
         "rocket",
         "bullet",
         "Player"
     };
 
-    void OnTriggerEnter2D(Collider2D collider)
+    [SerializeField]
+    private NiggerOnParachute nigger;
+
+    private void OnTriggerEnter2D(Collider2D collider)
     {
         if (destroyTags.All(x => x != collider.tag)) return;
         nigger.onParachute = false;

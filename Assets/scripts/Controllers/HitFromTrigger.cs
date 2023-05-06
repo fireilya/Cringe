@@ -26,14 +26,4 @@ public class HitFromTrigger : MonoBehaviour
             controller.SetOtherTriggersLockValue(sideCode, true);
         }
     }
-
-    void Update()
-    {
-        //if (isLockOther)
-        //{
-            
-        //}
-    }
-
-
 }

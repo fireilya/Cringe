@@ -1,20 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Egg : MonoBehaviour
 {
-    private Transform morgen;
-
     [SerializeField]
     private GameObject explode;
 
-    [SerializeField]
-    private float moveSpeed=8f;
-
     private bool isLaunched;
+    private Transform morgen;
 
-    void OnTriggerEnter2D(Collider2D collider)
+    [SerializeField]
+    private readonly float moveSpeed = 8f;
+
+    private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.name is "Morgen" or "StaticEnemyShield(Clone)" or "MorgenMouth" && isLaunched)
         {
@@ -22,22 +19,21 @@ public class Egg : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    void Start()
+
+    private void Start()
     {
         morgen = GameObject.FindWithTag("Morgen").GetComponent<Transform>();
     }
 
     public void Launch()
     {
-        isLaunched=true;
+        isLaunched = true;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (isLaunched)
-        {
             transform.position = Vector3.MoveTowards(transform.position, morgen.position, moveSpeed * Time.deltaTime);
-        }
     }
 }

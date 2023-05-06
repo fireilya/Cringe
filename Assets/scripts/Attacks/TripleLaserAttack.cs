@@ -5,6 +5,8 @@ using UnityEngine.Playables;
 
 public class TripleLaserAttack : MonoBehaviour, IAttack
 {
+    private readonly float speed = 9.5f;
+
     [SerializeField]
     private AttackController attackController;
 
@@ -25,10 +27,10 @@ public class TripleLaserAttack : MonoBehaviour, IAttack
     [SerializeField]
     private PlayableDirector postTripleLaserDirector;
 
-    private readonly float speed = 9.5f;
-
     [SerializeField]
     private PlayableDirector tripleLaserDirector;
+
+    public bool isPhaseEnd { get; set; }
 
     public void StartAttack()
     {
@@ -73,7 +75,6 @@ public class TripleLaserAttack : MonoBehaviour, IAttack
         isOnZero = enemyAttackControllerTransform.localPosition.y == 0;
     }
 
-    public bool isPhaseEnd { get; set; }
     public bool isAttackStarted { get; set; }
     public bool isOnZero { get; set; }
     public int neededPhaseCount { get; set; }
@@ -101,13 +102,10 @@ public class TripleLaserAttack : MonoBehaviour, IAttack
                     ? Mathf.Clamp(newYPosition, lastYPosition, neededYPosition)
                     : Mathf.Clamp(newYPosition, neededYPosition, lastYPosition);
                 enemyAttackControllerTransform.localPosition = new Vector3(
-                    enemyAttackControllerTransform.localPosition.x, 
+                    enemyAttackControllerTransform.localPosition.x,
                     newYPosition,
                     enemyAttackControllerTransform.localPosition.z);
-                if (Math.Abs(newYPosition - neededYPosition) < 1e-3)
-                {
-                    tripleLaserDirector.Play();
-                }
+                if (Math.Abs(newYPosition - neededYPosition) < 1e-3) tripleLaserDirector.Play();
             }
         }
     }

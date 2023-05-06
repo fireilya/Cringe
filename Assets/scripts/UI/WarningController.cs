@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Assets.scripts.Enums;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,23 +6,27 @@ using UnityEngine.UI;
 public class WarningController : MonoBehaviour
 {
     [SerializeField]
-    private float fallAlphaSpeed=1.2f;
+    private Image _cleanerNotReadyWarning;
+
+    [SerializeField]
+    private Image _popovNotReadyWarning;
 
     [SerializeField]
     private Image _rocketEmptyWarning;
+
     [SerializeField]
     private Image _titorNotReadyWarning;
-    [SerializeField] 
-    private Image _popovNotReadyWarning;
-    [SerializeField]
-    private Image _cleanerNotReadyWarning;
+
     [SerializeField]
     private AudioController audioController;
 
+    [SerializeField]
+    private readonly float fallAlphaSpeed = 1.2f;
 
-    private HashSet<Image> warnings=new();
 
-    void Start()
+    private readonly HashSet<Image> warnings = new();
+
+    private void Start()
     {
         warnings.Add(_rocketEmptyWarning);
         warnings.Add(_titorNotReadyWarning);
@@ -34,14 +35,11 @@ public class WarningController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         foreach (var warning in warnings)
-        {
-            warning.color= new Color(warning.color.r, warning.color.g,
-                warning.color.b, warning.color.a-fallAlphaSpeed*Time.deltaTime);
-        }
-
+            warning.color = new Color(warning.color.r, warning.color.g,
+                warning.color.b, warning.color.a - fallAlphaSpeed * Time.deltaTime);
     }
 
     public void ThrowWarning(WarningType type)
@@ -63,11 +61,12 @@ public class WarningController : MonoBehaviour
                     _popovNotReadyWarning.color.b, 1);
                 break;
             case WarningType.CleanerNotready:
-                _cleanerNotReadyWarning.color = new Color(_cleanerNotReadyWarning.color.r, _cleanerNotReadyWarning.color.g,
+                _cleanerNotReadyWarning.color = new Color(_cleanerNotReadyWarning.color.r,
+                    _cleanerNotReadyWarning.color.g,
                     _cleanerNotReadyWarning.color.b, 1);
                 break;
-
         }
+
         audioController.Play(AudioSources.UIFX, FXClips.Warning);
     }
 }

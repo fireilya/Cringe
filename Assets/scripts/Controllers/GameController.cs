@@ -3,29 +3,34 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    public int playerHealthAmount { get; private set; } = 3;
+    [SerializeField]
+    private AttackController attackController;
+
+    private int bossState;
+    private int currentLife;
+
+    [SerializeField]
+    private HealthManager healthManager;
 
     [SerializeField]
     private Morgen mainEnemy;
 
     [SerializeField]
+    private MoralPressureController moralPressureController;
+
+    [SerializeField]
     private Player player;
+
+    [SerializeField]
+    private RocketController rocketController;
+
+    [SerializeField]
+    private StateController stateController;
 
     [SerializeField]
     private UIController uiController;
 
-    [SerializeField]
-    private HealthManager healthManager;
-    [SerializeField]
-    private AttackController attackController;
-    [SerializeField]
-    private MoralPressureController moralPressureController;
-    [SerializeField]
-    private RocketController rocketController;
-    [SerializeField]
-    private StateController stateController;
-    private int bossState;
-    private int currentLife;
+    public int playerHealthAmount { get; private set; } = 3;
 
     public void ChangeStateIfNeed(int health)
     {
@@ -39,10 +44,7 @@ public class GameController : MonoBehaviour
     {
         foreach (var GO in SceneManager.GetActiveScene().GetRootGameObjects())
         {
-            if (GO.name is "Service" or "UI")
-            {
-                continue;
-            }
+            if (GO.name is "Service" or "UI") continue;
             Destroy(GO);
         }
     }
@@ -60,6 +62,7 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1;
         uiController.Resume();
     }
+
     public void Hit()
     {
         playerHealthAmount--;
@@ -75,7 +78,7 @@ public class GameController : MonoBehaviour
         GameDataContainer.PackContainer(bossState, currentLife);
     }
 
-    void Start()
+    private void Start()
     {
         StartGame();
     }
@@ -92,6 +95,7 @@ public class GameController : MonoBehaviour
         uiController.Win();
         Time.timeScale = 0;
     }
+
     public void StartGame()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -120,7 +124,7 @@ public class GameController : MonoBehaviour
 
     public void ResetHealth()
     {
-        playerHealthAmount = playerHealthAmount<3?3:playerHealthAmount;
+        playerHealthAmount = playerHealthAmount < 3 ? 3 : playerHealthAmount;
         healthManager.UpdateHealth(playerHealthAmount);
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using Assets.scripts;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -6,36 +5,42 @@ using Random = System.Random;
 
 public class AttackController : MonoBehaviour
 {
-    private int attackWithoutSupply;
-    private int SupplyAttackRare = 7;
+    [SerializeField]
+    private PlayableDirector[] _transitionAttacks;
+
     [HideInInspector]
     public int AttackAmount;
-    private bool isChooseAllowed = true;
-    private Random random = new();
-    private int currentAttack;
-    private int previousAttack = -1;
-    [HideInInspector]
-    public int FullAttackAmount;
 
     [SerializeField]
     private PlayableDirector[] attacks;
 
+    private int attackWithoutSupply;
+    private int currentAttack;
+
+    [HideInInspector]
+    public int FullAttackAmount;
+
+    private bool isChooseAllowed = true;
+
+    [HideInInspector]
+    public bool IsStateTransitionAttack;
+
     [SerializeField]
-    private PlayableDirector[] _transitionAttacks;
+    private AudioSource music;
+
+    [HideInInspector]
+    public int NextTransitionAttack;
+
+    private int previousAttack = -1;
+    private readonly Random random = new();
+    private readonly int SupplyAttackRare = 7;
 
     [SerializeField]
     private Timer waitTimer;
 
-    [SerializeField]
-    private AudioSource music;
-    [HideInInspector]
-    public bool IsStateTransitionAttack;
-    [HideInInspector]
-    public int NextTransitionAttack;
-
-    void Start()
+    private void Start()
     {
-        FullAttackAmount=attacks.Length;
+        FullAttackAmount = attacks.Length;
     }
 
     public void AllowFirstAttack()
@@ -47,19 +52,13 @@ public class AttackController : MonoBehaviour
     public void AllowAttack(bool isStop)
     {
         isChooseAllowed = true;
-        if (isStop)
-        {
-            attacks[currentAttack].Stop();
-        }
+        if (isStop) attacks[currentAttack].Stop();
     }
 
     public void LoseGame()
     {
         isChooseAllowed = false;
-        foreach (var director in attacks)
-        {
-            director.Stop();
-        }
+        foreach (var director in attacks) director.Stop();
     }
 
     private void StartTransitionAttack()
@@ -71,7 +70,7 @@ public class AttackController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (isChooseAllowed && waitTimer.IsEnded)
         {
@@ -80,21 +79,15 @@ public class AttackController : MonoBehaviour
                 StartTransitionAttack();
                 return;
             }
+
             int newAttack;
             do
             {
                 newAttack = random.Next(0, int.MaxValue) % AttackAmount;
+            } while (newAttack == previousAttack || newAttack == 3 && attackWithoutSupply < SupplyAttackRare);
 
-            } while (newAttack == previousAttack || (newAttack == 3 && attackWithoutSupply < SupplyAttackRare));
-
-            if (newAttack == 3)
-            {
-                attackWithoutSupply = 0;
-            }
-            else
-            {
-                attackWithoutSupply++;
-            }
+            if (newAttack == 3) attackWithoutSupply = 0;
+            else attackWithoutSupply++;
             previousAttack = newAttack;
             currentAttack = newAttack;
             attacks[currentAttack].Play();
@@ -103,9 +96,6 @@ public class AttackController : MonoBehaviour
             //currentAttack = 3;
             //directors[3].Play();
             isChooseAllowed = false;
-            
-            
         }
     }
 }
-

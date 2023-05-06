@@ -1,31 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Playables;
 using Random = System.Random;
 
 public class InstaSamkaController : MonoBehaviour
 {
-    [SerializeField]
-    private InstaSamka[] instaSamkas;
-    private Random rnd=new();
     private PlayableDirector[] instaSamkaDirectors;
 
-    void Start()
+    [SerializeField]
+    private InstaSamka[] instaSamkas;
+
+    private readonly Random rnd = new();
+
+    private void Start()
     {
         instaSamkaDirectors = new PlayableDirector[instaSamkas.Length];
-        for (int i = 0; i < instaSamkas.Length; i++)
-        {
+        for (var i = 0; i < instaSamkas.Length; i++)
             instaSamkaDirectors[i] = instaSamkas[i].GetComponent<PlayableDirector>();
-            
-        }
     }
 
     public void DoHit1(string message)
     {
         instaSamkaDirectors[0].Play();
-        instaSamkas[0].message=message;
+        instaSamkas[0].message = message;
     }
 
     public void DoHit2(string message)

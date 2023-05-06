@@ -1,64 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StaticEnemyShield : MonoBehaviour
 {
-    [SerializeField]
-    private int maxHealth = 200;
     private int currentHealth;
-    [SerializeField]
-    private MissileData missileData;
-
-    private Image healthBar;
 
     private float fallingAlpha;
     private float fillSpeed;
 
-    private SpriteRenderer spriteRenderer;
+    [SerializeField]
+    private readonly float growSpeed = 7;
+
+    private Image healthBar;
 
     private bool isBuilding;
 
-    private bool isHittable;
-    [SerializeField]
-    private float growSpeed=7;
-
     private bool isDestroyed;
 
-    void OnTriggerEnter2D(Collider2D collider)
+    private bool isHittable;
+
+    [SerializeField]
+    private readonly int maxHealth = 200;
+
+    [SerializeField]
+    private MissileData missileData;
+
+    private SpriteRenderer spriteRenderer;
+
+    private void OnTriggerEnter2D(Collider2D collider)
     {
         if (missileData.DamageData.ContainsKey(collider.tag) && collider.tag != "ExplosionRadius" && isHittable)
         {
-           currentHealth -= missileData.DamageData[collider.tag];
-           healthBar.fillAmount = (float)currentHealth / maxHealth;
+            currentHealth -= missileData.DamageData[collider.tag];
+            healthBar.fillAmount = (float)currentHealth / maxHealth;
         }
     }
-    void Awake()
+
+    private void Awake()
     {
         currentHealth = maxHealth;
     }
-    void Start()
+
+    private void Start()
     {
-        spriteRenderer=GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         currentHealth = maxHealth;
-        healthBar =GameObject.Find("ShieldHealthBar").GetComponent<Image>();
+        healthBar = GameObject.Find("ShieldHealthBar").GetComponent<Image>();
     }
 
     public void StartBuilding(float buildTime)
     {
         isHittable = false;
         fallingAlpha = 1 / buildTime;
-        fillSpeed= ((float)currentHealth / maxHealth) / buildTime;
-        isBuilding=true;
+        fillSpeed = (float)currentHealth / maxHealth / buildTime;
+        isBuilding = true;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (isBuilding)
         {
-            spriteRenderer.color += new Color(0, 0, 0, fallingAlpha*Time.deltaTime);
+            spriteRenderer.color += new Color(0, 0, 0, fallingAlpha * Time.deltaTime);
             healthBar.fillAmount += fillSpeed * Time.deltaTime;
             isHittable = healthBar.fillAmount >= 1;
             isBuilding = !isHittable;
@@ -74,10 +77,10 @@ public class StaticEnemyShield : MonoBehaviour
             return;
         }
 
-        if (currentHealth<=0)
+        if (currentHealth <= 0)
         {
             Destroy(gameObject, 3f);
-            isDestroyed=true;
+            isDestroyed = true;
         }
     }
 }

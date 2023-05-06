@@ -1,43 +1,44 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class Popov : MonoBehaviour
 {
+    private AudioSource audioSource;
+
     [SerializeField]
     private GameObject cucumber;
 
+    private CucumberInBack cucumberInMorgen;
+
     [SerializeField]
     private Egg egg;
-    [SerializeField] 
+
+    [SerializeField]
     private Transform eggSpawnPoint;
-
-    private Transform morgenBack;
-
-    private CucumberInBack cucumberInMorgen;
 
     private bool isPursuit;
 
     private bool isPursuitEnded;
 
-    private Vector3 returnCoordinates;
-    private AudioSource audioSource;
+    private Transform morgenBack;
+
+    [SerializeField]
+    private readonly float moveSpeed = 10f;
 
     [SerializeField]
     private GameObject popovOut;
 
+    private Vector3 returnCoordinates;
+
     private Egg spawnedEgg;
 
-    [SerializeField]
-    private float moveSpeed = 10f;
-
-    void Start()
+    private void Start()
     {
-        morgenBack=GameObject.Find("MorgenBack").GetComponent<Transform>();
-        cucumberInMorgen = GameObject.FindGameObjectWithTag("cucumberInMorgen").transform.GetChild(0).GetComponent<CucumberInBack>();
+        morgenBack = GameObject.Find("MorgenBack").GetComponent<Transform>();
+        cucumberInMorgen = GameObject.FindGameObjectWithTag("cucumberInMorgen").transform.GetChild(0)
+            .GetComponent<CucumberInBack>();
         audioSource = GetComponent<AudioSource>();
-        returnCoordinates=transform.position;
+        returnCoordinates = transform.position;
     }
 
     public void SpawnEgg()
@@ -49,6 +50,7 @@ public class Popov : MonoBehaviour
     {
         Instantiate(popovOut, transform.position, Quaternion.identity);
     }
+
     public void LaunchEgg()
     {
         spawnedEgg.Launch();
@@ -62,7 +64,7 @@ public class Popov : MonoBehaviour
 
     public void StartPursuit()
     {
-        isPursuit=true;
+        isPursuit = true;
     }
 
     private void EndPursuit()
@@ -70,7 +72,7 @@ public class Popov : MonoBehaviour
         cucumberInMorgen.gameObject.SetActive(true);
         cucumber.SetActive(false);
         audioSource.Play();
-        isPursuit=false;
+        isPursuit = false;
         isPursuitEnded = true;
         StartCoroutine(cucumberInMorgen.Explode());
     }
@@ -81,23 +83,20 @@ public class Popov : MonoBehaviour
         Instantiate(popovOut, transform.position, Quaternion.identity);
     }
 
-    void Update()
+    private void Update()
     {
         if (isPursuit)
         {
             transform.position =
                 Vector3.MoveTowards(transform.position, morgenBack.position, moveSpeed * Time.deltaTime);
-            if (transform.position==morgenBack.position)
-            {
-                EndPursuit();
-            }
+            if (transform.position == morgenBack.position) EndPursuit();
         }
 
         if (isPursuitEnded)
         {
             transform.position =
                 Vector3.MoveTowards(transform.position, returnCoordinates, moveSpeed * Time.deltaTime);
-            if (transform.position==returnCoordinates)
+            if (transform.position == returnCoordinates)
             {
                 isPursuitEnded = false;
                 StartCoroutine(OutPopovWithCucumber());

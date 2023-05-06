@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Titor : MonoBehaviour
 {
     [SerializeField]
-    private Rocket[] rockets;
+    private GameObject[] bonuses;
 
     [SerializeField]
-    private GameObject[] bonuses;
+    private Rocket[] rockets;
 
     public void DropBonuses()
     {
         foreach (var bonus in bonuses)
         {
-            bonus.transform.parent=null;
-            var bonusRB=bonus.GetComponent<Rigidbody2D>();
+            bonus.transform.parent = null;
+            var bonusRB = bonus.GetComponent<Rigidbody2D>();
             bonusRB.bodyType = RigidbodyType2D.Dynamic;
         }
     }
@@ -24,7 +22,7 @@ public class Titor : MonoBehaviour
     {
         foreach (var rocket in rockets)
         {
-            rocket.transform.parent=null;
+            rocket.transform.parent = null;
             rocket.Launch();
         }
     }

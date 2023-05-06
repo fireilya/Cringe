@@ -1,28 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class InstasamkaBullet : MonoBehaviour
 {
     [SerializeField]
-    private float growSpeed;
+    private float forcePower;
 
     [SerializeField]
-    private float forcePower;
+    private float growSpeed;
+
     private Rigidbody2D rb;
 
-    void Start()
+    private void Start()
     {
-        rb=GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         Destroy(gameObject, 5f);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         rb.AddForce(Vector2.left * forcePower);
     }
-    void Update()
+
+    private void Update()
     {
         transform.localScale = new Vector3(
             transform.localScale.x + growSpeed * Time.deltaTime,

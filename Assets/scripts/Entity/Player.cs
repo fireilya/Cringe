@@ -1,70 +1,20 @@
 using System;
-using Assets.scripts;
 using System.Collections;
 using System.Linq;
+using Assets.scripts;
 using Assets.scripts.Enums;
 using UnityEngine;
 using UnityEngine.VFX;
-using Quaternion = UnityEngine.Quaternion;
-using Timer = Assets.scripts.Timer;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private HealthManager healthMenager;
-    [SerializeField]
-    private float speed = 5.0f;
-    [SerializeField]
-    private float currentSpeed;
-    private float gyperJumpSpeed = 19f;
+    private AbilityController abilityController;
 
-    [SerializeField]
-    private VisualEffect boostVFX;
-    private float boost = 35f;
-    private float gyperJumpCulDownTime = 0.2f;
-
-    [SerializeField]
-    private Timer mainTimer;
-
-    [SerializeField]
-    private GameController gameController;
-    [SerializeField]
-    private GameObject bullet;
-
-    private Rigidbody2D playerRB;
-    [SerializeField]
-    private HitFromTrigger[] playerTriggers;
-    private float highLimit=4.74f;
-    private float lowLimit = -4.04f;
-    private float leftLimit = -8.34f;
-    private float rightLimit= 8.34f;
-    private bool isMovementBlocked;
-    private Timer unhitableTimer;
-    private Timer gyperJumpCulDownTimer;
-    private Timer bulletTimer;
-    private float repulsionForce = 20f;
-    private float repulsionSlowing = 40f;
-    private Vector2 repulsionVector;
     [SerializeField]
     private AudioController audioController;
 
-    [SerializeField]
-    private Transform bulletSpawnerTransform;
-
-    [SerializeField]
-    private RocketController rocketController;
-    private string[] goodTags = {
-        "rocket",
-        "bullet",
-        "Titor",
-        "Popov",
-        "Egg",
-        "CleaningShield"
-    };
-
-    private string[] bonusTags =
+    private readonly string[] bonusTags =
     {
         "FullRockets",
         "FullHealth",
@@ -74,13 +24,76 @@ public class Player : MonoBehaviour
         "CleanerBoost"
     };
 
+    private readonly float boost = 35f;
+
     [SerializeField]
-    private Sprite unhittablePlayerSprite;
+    private VisualEffect boostVFX;
+
+    [SerializeField]
+    private GameObject bullet;
+
+    [SerializeField]
+    private Transform bulletSpawnerTransform;
+
+    private Timer bulletTimer;
+
+    [SerializeField]
+    private float currentSpeed;
+
+    [SerializeField]
+    private GameController gameController;
+
+    private readonly string[] goodTags =
+    {
+        "rocket",
+        "bullet",
+        "Titor",
+        "Popov",
+        "Egg",
+        "CleaningShield"
+    };
+
+    private readonly float gyperJumpCulDownTime = 0.2f;
+    private Timer gyperJumpCulDownTimer;
+    private readonly float gyperJumpSpeed = 19f;
+
+    [SerializeField]
+    private HealthManager healthMenager;
+
+    private readonly float highLimit = 4.74f;
+    private bool isMovementBlocked;
+    private readonly float leftLimit = -8.34f;
+    private readonly float lowLimit = -4.04f;
+
+    [SerializeField]
+    private Timer mainTimer;
+
     [SerializeField]
     private Sprite normalPlayerSprite;
-    [SerializeField]
-    private AbilityController abilityController;
+
+    private Animator playerAnimator;
+
+    private Rigidbody2D playerRB;
     private SpriteRenderer playerSpriteRenderer;
+
+    [SerializeField]
+    private HitFromTrigger[] playerTriggers;
+
+    private readonly float repulsionForce = 20f;
+    private readonly float repulsionSlowing = 40f;
+    private Vector2 repulsionVector;
+    private readonly float rightLimit = 8.34f;
+
+    [SerializeField]
+    private RocketController rocketController;
+
+    [SerializeField]
+    private readonly float speed = 5.0f;
+
+    private Timer unhitableTimer;
+
+    [SerializeField]
+    private Sprite unhittablePlayerSprite;
 
     private void KeepInBorder()
     {
@@ -90,42 +103,39 @@ public class Player : MonoBehaviour
             transform.localPosition.z);
     }
 
-    private Animator playerAnimator;
-
     public HitFromTrigger[] GetHitFromTriggers()
     {
         return playerTriggers;
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         unhitableTimer = Instantiate(mainTimer);
         gyperJumpCulDownTimer = Instantiate(mainTimer);
         bulletTimer = Instantiate(mainTimer);
         currentSpeed = speed;
-        playerRB=GetComponent<Rigidbody2D>();
-        playerAnimator=GetComponent<Animator>();
-        playerSpriteRenderer=GetComponent<SpriteRenderer>();
+        playerRB = GetComponent<Rigidbody2D>();
+        playerAnimator = GetComponent<Animator>();
+        playerSpriteRenderer = GetComponent<SpriteRenderer>();
         playerSpriteRenderer.sprite = normalPlayerSprite;
         unhitableTimer.StartTimer(1.0f);
         StartCoroutine(ShowUnhittablePlayer());
     }
 
-    void OnTriggerStay2D(Collider2D collider)
+    private void OnTriggerStay2D(Collider2D collider)
     {
         var colliderIdentifier = IdentifyCollider(collider);
         switch (colliderIdentifier)
         {
             case ColliderIdentifier.good:
                 return;
-            case ColliderIdentifier.bad: 
-                //Hit();
+            case ColliderIdentifier.bad:
+                Hit();
                 break;
             case ColliderIdentifier.bonus:
                 ApplyBonus(collider.tag);
                 Destroy(collider.gameObject);
                 break;
-                
         }
     }
 
@@ -152,6 +162,7 @@ public class Player : MonoBehaviour
                 abilityController.ApplyTimerBoostBonus(AccumulateAbilityIndex.CleaningShield, 20f);
                 break;
         }
+
         audioController.Play(AudioSources.BonusFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);
     }
 
@@ -170,17 +181,18 @@ public class Player : MonoBehaviour
     {
         if (!unhitableTimer.IsEnded) return;
         unhitableTimer.StartTimer(1.0f);
-        audioController.Play(AudioSources.PlayerFX,FXClips.Hit, AudioMixerOutputGroups.SilentClips);
+        audioController.Play(AudioSources.PlayerFX, FXClips.Hit, AudioMixerOutputGroups.SilentClips);
         StartCoroutine(ShowUnhittablePlayer());
         gameController.Hit();
         for (var i = 0; i < playerTriggers.Length; i++)
         {
             if (playerTriggers[i].isLocked) continue;
-            repulsionVector=ConvertSideToVector((HitSide)i);
+            repulsionVector = ConvertSideToVector((HitSide)i);
             break;
         }
-        Debug.Log("HOT!!!"+repulsionVector);
-        currentSpeed=repulsionForce;
+
+        Debug.Log("HOT!!!" + repulsionVector);
+        currentSpeed = repulsionForce;
         isMovementBlocked = true;
         playerAnimator.SetTrigger("Repulse");
         playerRB.velocity = repulsionVector * currentSpeed;
@@ -205,27 +217,28 @@ public class Player : MonoBehaviour
 
     private ColliderIdentifier IdentifyCollider(Collider2D collider)
     {
-        var colliderTag= collider.tag;
-        return goodTags.Any(x=>x==colliderTag) 
-            ? ColliderIdentifier.good 
-            : bonusTags.Any(x=>x==colliderTag)
+        var colliderTag = collider.tag;
+        return goodTags.Any(x => x == colliderTag)
+            ? ColliderIdentifier.good
+            : bonusTags.Any(x => x == colliderTag)
                 ? ColliderIdentifier.bonus
                 : ColliderIdentifier.bad;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if(isMovementBlocked)
+        if (isMovementBlocked)
         {
             DoRepulsion();
             return;
         }
+
         GetFixedInput();
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))   
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (Math.Abs(Time.timeScale - 1) < 1e-3)
             {
@@ -238,12 +251,14 @@ public class Player : MonoBehaviour
                 isMovementBlocked = false;
             }
         }
+
         if (isMovementBlocked) return;
         if (currentSpeed > speed)
         {
-            currentSpeed-=boost*Time.deltaTime;
+            currentSpeed -= boost * Time.deltaTime;
             currentSpeed = Mathf.Clamp(currentSpeed, speed, float.MaxValue);
         }
+
         GetInput();
     }
 
@@ -258,7 +273,7 @@ public class Player : MonoBehaviour
         currentSpeed = speed;
     }
 
-    void GetFixedInput()
+    private void GetFixedInput()
     {
         var velocityVector = new Vector3(0, 0, 0);
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
@@ -287,10 +302,7 @@ public class Player : MonoBehaviour
             unhitableTimer.StartTimer(0.35f);
         }
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            rocketController.LaunchRocket();
-        }
+        if (Input.GetMouseButtonDown(1)) rocketController.LaunchRocket();
 
         if (Input.GetMouseButton(0) && bulletTimer.IsEnded)
         {

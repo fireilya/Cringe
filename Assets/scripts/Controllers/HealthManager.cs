@@ -3,27 +3,27 @@ using UnityEngine;
 
 public class HealthManager : MonoBehaviour
 {
+    private readonly Vector3 _offset = new(-0.8425192f, 0, 0);
+
     [SerializeField]
     private GameObject _health;
 
-    private readonly Vector3 _offset=new Vector3(-0.8425192f, 0, 0);
-    private Vector3 _lastHeartPosition=new Vector3(8.435f+0.8425192f, -4.555f, 0);
+    private Vector3 _lastHeartPosition = new(8.435f + 0.8425192f, -4.555f, 0);
     private List<GameObject> instantiateObjects;
-    void Start()
-    {
 
+    private void Start()
+    {
     }
 
     public void UpdateHealth(int health)
     {
         if (instantiateObjects != null)
-        {
             foreach (var gameObject in instantiateObjects)
             {
                 Destroy(gameObject);
-                _lastHeartPosition-=_offset;
+                _lastHeartPosition -= _offset;
             }
-        }
+
         instantiateObjects = new List<GameObject>();
         for (var i = 0; i < health; i++)
         {
@@ -35,8 +35,7 @@ public class HealthManager : MonoBehaviour
     public void Hit()
     {
         Destroy(instantiateObjects[^1]);
-        _lastHeartPosition-=_offset;
-        instantiateObjects.RemoveAt(instantiateObjects.Count-1);
+        _lastHeartPosition -= _offset;
+        instantiateObjects.RemoveAt(instantiateObjects.Count - 1);
     }
-
 }

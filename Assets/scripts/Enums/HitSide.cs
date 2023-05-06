@@ -2,11 +2,9 @@
 {
     public enum HitSide
     {
-        FromTop=0,
-        FromBottom=1,
-        FromLeft=2,
-        FromRight=3,
-        //FromTopRight=4,
-        //FromBottomRight=5,
+        FromTop = 0,
+        FromBottom = 1,
+        FromLeft = 2,
+        FromRight = 3
     }
 }

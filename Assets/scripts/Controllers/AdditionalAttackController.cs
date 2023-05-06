@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Assets.scripts;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -8,32 +5,29 @@ using Random = System.Random;
 
 public class AdditionalAttackController : MonoBehaviour
 {
-    private bool isAttackAllowed;
-    private Random random=new();
-
     [SerializeField]
     private PlayableDirector[] attacks;
-
-    private PlayableDirector currentAttack;
 
     [SerializeField]
     private Timer attackTimer;
 
+    private PlayableDirector currentAttack;
+    private bool isAttackAllowed;
+    private readonly Random random = new();
+
     public void AllowAttack(bool isStop)
     {
         attackTimer.StartTimer(random.Next(3, 10));
-        isAttackAllowed=true;
-        if (isStop)
-        {
-            currentAttack.Stop();
-        }
+        isAttackAllowed = true;
+        if (isStop) currentAttack.Stop();
     }
-    void Start()
+
+    private void Start()
     {
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (isAttackAllowed && attackTimer.IsEnded)
         {

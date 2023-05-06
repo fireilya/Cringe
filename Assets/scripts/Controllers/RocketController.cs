@@ -1,33 +1,38 @@
 using Assets.scripts;
 using Assets.scripts.Enums;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RocketController : MonoBehaviour
 {
     [SerializeField]
-    private Timer mainTimer;
+    private AudioController audioController;
+
+    private int currentRocketCount;
+
+    [SerializeField]
+    private Image InactiveRocketIcon;
+
+    private bool isEmpty = true;
+
     [SerializeField]
     private Rocket mainRocket;
 
     [SerializeField]
+    private Timer mainTimer;
+
+    [SerializeField]
     private Player player;
 
-    private Rocket spawnedRocket;
+    private readonly int rocketCount = 10;
+    private readonly float RocketCulDown = 1.0f;
     private Timer rocketCulDownTimer;
-    private int currentRocketCount;
-    private int rocketCount=10;
-    private float RocketCulDown=1.0f;
-    [SerializeField]
-    private Image InactiveRocketIcon;
-    private bool isEmpty=true;
 
     [SerializeField]
     private Transform rocketSpawnerTransform;
 
-    [SerializeField]
-    private AudioController audioController;
+    private Rocket spawnedRocket;
+
     [SerializeField]
     private WarningController warningController;
 
@@ -36,13 +41,14 @@ public class RocketController : MonoBehaviour
         currentRocketCount = rocketCount;
         InactiveRocketIcon.fillAmount = 0;
     }
-    void Start()
+
+    private void Start()
     {
         rocketCulDownTimer = Instantiate(mainTimer);
     }
 
 
-    void Update()
+    private void Update()
     {
         switch (rocketCulDownTimer.IsEnded)
         {
@@ -69,12 +75,13 @@ public class RocketController : MonoBehaviour
             warningController.ThrowWarning(WarningType.RocketAmmoEmpty);
             return;
         }
+
         spawnedRocket.tag = "rocket";
         spawnedRocket.gameObject.transform.parent = null;
         spawnedRocket.Launch();
         rocketCulDownTimer.StartTimer(RocketCulDown);
         currentRocketCount--;
-        isEmpty=true;
-        InactiveRocketIcon.fillAmount = 1-((float)currentRocketCount/rocketCount);
+        isEmpty = true;
+        InactiveRocketIcon.fillAmount = 1 - (float)currentRocketCount / rocketCount;
     }
 }

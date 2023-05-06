@@ -61,11 +61,11 @@ public class AbilityController : MonoBehaviour
     {
         data = new AbilityData[]
         {
-            new(10, AudioSources.TitorNotification, FXClips.TitorReady, titorInactiveIcon)
+            new(100, AudioSources.TitorNotification, FXClips.TitorReady, titorInactiveIcon)
         };
         accumulateData = new AccumulateAbilityData[]
         {
-            new(3, 3, AudioSources.PopovNotification, FXClips.PopovReady, FXClips.PopovEggReady, popovEggs),
+            new(30, 3, AudioSources.PopovNotification, FXClips.PopovReady, FXClips.PopovEggReady, popovEggs),
             new(20, 3, AudioSources.CleanerNotification, FXClips.CleanerReady, FXClips.CleanerReady, cleaners)
         };
     }
@@ -250,10 +250,10 @@ public class AbilityController : MonoBehaviour
 
     private class AbilityData
     {
+        public readonly AudioSources AudioSource;
         public readonly float CulDownTime;
         public readonly Image InactiveIcon;
         public readonly FXClips ReadyClip;
-        public readonly AudioSources AudioSource;
         public bool IsReady;
         public float Timer;
 
@@ -270,13 +270,13 @@ public class AbilityController : MonoBehaviour
 
     private class AccumulateAbilityData
     {
+        public readonly AudioSources AudioSource;
         public readonly int ChargeAmount;
         public readonly float CulDownTime;
         public readonly Image[] Icons;
         public readonly FXClips OneChargeReady;
         public readonly float OneChargeTime;
         public readonly FXClips ReadyClip;
-        public readonly AudioSources AudioSource;
         public int CurrentReadyChargeAmount;
         public bool IsReady;
         public float Timer;

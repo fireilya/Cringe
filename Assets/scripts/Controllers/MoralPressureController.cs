@@ -7,11 +7,11 @@ public class MoralPressureController : MonoBehaviour
     [SerializeField]
     private GameObject[] AngryNiggers;
 
-    private Random rnd = new();
+    private readonly Random rnd = new();
 
     public IEnumerator DoMoralPressure()
     {
-        var index=rnd.Next()%AngryNiggers.Length;
+        var index = rnd.Next() % AngryNiggers.Length;
         var animator = AngryNiggers[index].GetComponent<Animator>();
         var audioSource = AngryNiggers[index].GetComponent<AudioSource>();
         var laughIcon = AngryNiggers[index].transform.GetChild(0);
@@ -22,6 +22,5 @@ public class MoralPressureController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         laughIcon.gameObject.SetActive(false);
         animator.SetTrigger("laughed");
-
     }
 }

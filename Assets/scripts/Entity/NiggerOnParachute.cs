@@ -6,42 +6,47 @@ using Random = System.Random;
 
 public class NiggerOnParachute : MonoBehaviour
 {
-    [SerializeField]
-    private MissileData data;
+    private readonly Random rand = new();
+    private readonly Random rnd = new();
 
     [SerializeField]
     private GameObject[] bonuses;
 
     [SerializeField]
-    private GameObject laughIcon;
+    private MissileData data;
 
-    [SerializeField] 
-    private AudioClip niggerHitClip;
-    [SerializeField]
-    private AudioClip niggerLaughClip;
-    [SerializeField]
-    private AudioClip niggerFallingClip;
-
-    private AudioSource niggerAudioSource;
-    private Random rnd=new();
-
-    [SerializeField]
-    private Timer lifeTimer;
-    private Random rand=new();
     private int health = 5;
-    private SpriteRenderer niggerSpriteRenderer;
 
     [SerializeField]
     private Sprite hittedNiggerSprite;
 
     [SerializeField]
+    private GameObject laughIcon;
+
+    [SerializeField]
+    private Timer lifeTimer;
+
+    private AudioSource niggerAudioSource;
+
+    [SerializeField]
+    private AudioClip niggerFallingClip;
+
+    [SerializeField]
+    private AudioClip niggerHitClip;
+
+    [SerializeField]
+    private AudioClip niggerLaughClip;
+
+    private Rigidbody2D niggerRB;
+    private SpriteRenderer niggerSpriteRenderer;
+
+    [SerializeField]
     private AudioMixerGroup normalClips;
 
     private Sprite normalNiggerSprite;
-    private Rigidbody2D niggerRB;
     public bool onParachute = true;
 
-    void OnTriggerEnter2D(Collider2D collider)  
+    private void OnTriggerEnter2D(Collider2D collider)
     {
         if (data.DamageData.ContainsKey(collider.tag))
         {
@@ -59,7 +64,6 @@ public class NiggerOnParachute : MonoBehaviour
         laughIcon.SetActive(true);
         yield return new WaitForSeconds(1.0f);
         laughIcon.SetActive(false);
-
     }
 
     private void DoRandomLaugh()
@@ -75,7 +79,7 @@ public class NiggerOnParachute : MonoBehaviour
     {
         niggerRB.drag = 0;
         niggerAudioSource.volume = 1;
-        niggerAudioSource.clip= niggerFallingClip;
+        niggerAudioSource.clip = niggerFallingClip;
         niggerAudioSource.spatialBlend = 1f;
         niggerAudioSource.Play();
     }
@@ -84,36 +88,35 @@ public class NiggerOnParachute : MonoBehaviour
     {
         niggerSpriteRenderer.sprite = hittedNiggerSprite;
         yield return new WaitForSeconds(0.05f);
-        niggerSpriteRenderer.sprite= normalNiggerSprite;
+        niggerSpriteRenderer.sprite = normalNiggerSprite;
     }
 
-    void Start()
+    private void Start()
     {
         niggerRB = GetComponent<Rigidbody2D>();
         lifeTimer.StartTimer(10f);
-        niggerSpriteRenderer=GetComponent<SpriteRenderer>();
-        normalNiggerSprite=niggerSpriteRenderer.sprite;
-        niggerAudioSource=GetComponent<AudioSource>();
+        niggerSpriteRenderer = GetComponent<SpriteRenderer>();
+        normalNiggerSprite = niggerSpriteRenderer.sprite;
+        niggerAudioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         DoRandomLaugh();
-        if (health<=0)
+        if (health <= 0)
         {
             var nextBonus = rand.Next();
             var accessDouble = rand.NextDouble();
-            if (accessDouble > 0.5 || bonuses[nextBonus % bonuses.Length].tag=="MegaHealth" && accessDouble>0.85)
-            { 
+            if (accessDouble > 0.5)
+            {
+                if (bonuses[nextBonus % bonuses.Length].tag == "MegaHealth" && accessDouble < 0.80) return;
+
                 Instantiate(bonuses[nextBonus % bonuses.Length], transform.localPosition, Quaternion.identity);
             }
+
             Destroy(gameObject);
         }
 
-        if (lifeTimer.IsEnded)
-        {
-            Destroy(gameObject);
-        }
+        if (lifeTimer.IsEnded) Destroy(gameObject);
     }
 }
