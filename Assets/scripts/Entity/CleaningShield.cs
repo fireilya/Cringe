@@ -3,30 +3,27 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class InstasamkaBullet : MonoBehaviour
+public class CleaningShield : MonoBehaviour
 {
     [SerializeField]
     private float growSpeed;
-
     [SerializeField]
-    private float forcePower;
-    private Rigidbody2D rb;
-
+    private float maxScale;
     void Start()
     {
-        rb=GetComponent<Rigidbody2D>();
-        Destroy(gameObject, 5f);
+        
     }
 
-    void FixedUpdate()
-    {
-        rb.AddForce(Vector2.left * forcePower);
-    }
+    // Update is called once per frame
     void Update()
     {
         transform.localScale = new Vector3(
             transform.localScale.x + growSpeed * Time.deltaTime,
             transform.localScale.y + growSpeed * Time.deltaTime,
             transform.localScale.z + growSpeed * Time.deltaTime);
+        if (transform.localScale.x > maxScale)
+        {
+            Destroy(gameObject);
+        }
     }
 }

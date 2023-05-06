@@ -104,7 +104,7 @@ public class NiggerOnParachute : MonoBehaviour
         {
             var nextBonus = rand.Next();
             var accessDouble = rand.NextDouble();
-            if (accessDouble > 0.6 || bonuses[nextBonus % bonuses.Length].tag=="MegaHealth" && accessDouble>0.85)
+            if (accessDouble > 0.5 || bonuses[nextBonus % bonuses.Length].tag=="MegaHealth" && accessDouble>0.85)
             { 
                 Instantiate(bonuses[nextBonus % bonuses.Length], transform.localPosition, Quaternion.identity);
             }

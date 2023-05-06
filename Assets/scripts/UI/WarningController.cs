@@ -18,6 +18,8 @@ public class WarningController : MonoBehaviour
     [SerializeField] 
     private Image _popovNotReadyWarning;
     [SerializeField]
+    private Image _cleanerNotReadyWarning;
+    [SerializeField]
     private AudioController audioController;
 
 
@@ -28,6 +30,7 @@ public class WarningController : MonoBehaviour
         warnings.Add(_rocketEmptyWarning);
         warnings.Add(_titorNotReadyWarning);
         warnings.Add(_popovNotReadyWarning);
+        warnings.Add(_cleanerNotReadyWarning);
     }
 
     // Update is called once per frame
@@ -58,6 +61,10 @@ public class WarningController : MonoBehaviour
             case WarningType.PopovNotReady:
                 _popovNotReadyWarning.color = new Color(_popovNotReadyWarning.color.r, _popovNotReadyWarning.color.g,
                     _popovNotReadyWarning.color.b, 1);
+                break;
+            case WarningType.CleanerNotready:
+                _cleanerNotReadyWarning.color = new Color(_cleanerNotReadyWarning.color.r, _cleanerNotReadyWarning.color.g,
+                    _cleanerNotReadyWarning.color.b, 1);
                 break;
 
         }

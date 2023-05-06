@@ -10,6 +10,7 @@ namespace Assets.scripts.Enums
     {
         RocketAmmoEmpty,
         TitorNotReady,
-        PopovNotReady
+        PopovNotReady,
+        CleanerNotready
     }
 }

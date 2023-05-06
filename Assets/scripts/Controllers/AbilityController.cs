@@ -1,30 +1,37 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Assets.scripts.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-
 public class AbilityController : MonoBehaviour
 {
-    [SerializeField]
-    private Transform SpawnPoint;
+    private readonly float chooseTimeScale = 0.05f;
+    private AccumulateAbilityData[] accumulateData;
 
-    [SerializeField]
-    private Titor titorWithRockets;
-    [SerializeField]
-    private Titor titorWithBunuses;
-    [SerializeField]
-    private WarningController warningController;
     [SerializeField]
     private AudioController audioController;
 
     [SerializeField]
-    private GameObject titorChooseScreen;
-    [SerializeField] 
+    private CleaningShield bulletsCleaner;
+
+    [SerializeField]
+    private Transform bulletsCleanerSpawnPoint;
+
+    [SerializeField]
+    private Image[] cleaners;
+
+    private GameObject currentChooseScreen;
+
+    private AbilityData[] data;
+
+    [SerializeField]
     private GameObject popovChooseScreen;
+
+    [SerializeField]
+    private Image[] popovEggs;
+
+    [SerializeField]
+    private Transform popovSpawnPoint;
 
     [SerializeField]
     private PopovEnter popovWithCucumber;
@@ -33,27 +40,44 @@ public class AbilityController : MonoBehaviour
     private PopovEnter popovWithEgg;
 
     [SerializeField]
-    private Transform popovSpawnPoint;
-    private float chooseTimeScale = 0.05f;
-    private GameObject currentChooseScreen;
-    private float popovEggTime = 30f;
-    private int readyPopovEggCount;
+    private Transform SpawnPoint;
 
     [SerializeField]
-    private Image[] popovEggs;
+    private GameObject titorChooseScreen;
 
     [SerializeField]
-    private Image[] inactiveIcons;
+    private Image titorInactiveIcon;
 
-    private AbilityData[] data =
+    [SerializeField]
+    private Titor titorWithBunuses;
+
+    [SerializeField]
+    private Titor titorWithRockets;
+
+    [SerializeField]
+    private WarningController warningController;
+
+    private void Start()
     {
-        new( 100, "Titor", FXClips.TitorReady),
-        new( 90, "Popov", FXClips.PopovReady),
-    };
+        data = new AbilityData[]
+        {
+            new(10, AudioSources.TitorNotification, FXClips.TitorReady, titorInactiveIcon)
+        };
+        accumulateData = new AccumulateAbilityData[]
+        {
+            new(3, 3, AudioSources.PopovNotification, FXClips.PopovReady, FXClips.PopovEggReady, popovEggs),
+            new(4, 3, AudioSources.CleanerNotification, FXClips.GunShot, FXClips.GunReload, cleaners)
+        };
+    }
 
     public void ApplyTimerBoostBonus(AbilityIndex ability, float boost)
     {
         data[(int)ability].Timer += boost;
+    }
+
+    public void ApplyTimerBoostBonus(AccumulateAbilityIndex ability, float boost)
+    {
+        accumulateData[(int)ability].Timer += boost;
     }
 
     private void CallTitor()
@@ -63,6 +87,7 @@ public class AbilityController : MonoBehaviour
             warningController.ThrowWarning(WarningType.TitorNotReady);
             return;
         }
+
         ToggleChooseScreen(titorChooseScreen);
     }
 
@@ -84,55 +109,55 @@ public class AbilityController : MonoBehaviour
     }
 
 
-    private void FillPopovEggs()
+    private void FillAccumulateAbility()
     {
-        var index = (int)AbilityIndex.Popov;
-        var fullEggMaxIndex = (int)Math.Floor(data[index].Timer / popovEggTime);
-        if (fullEggMaxIndex>readyPopovEggCount && fullEggMaxIndex!=3)
+        foreach (var accumulateAbility in accumulateData)
         {
-            audioController.Play(AudioSources.UIFX, FXClips.PopovEggReady, AudioMixerOutputGroups.SilentClips);
-        }
-
-        readyPopovEggCount = fullEggMaxIndex;
-        for (var i = 0; i < popovEggs.Length; i++)
-        {
-            popovEggs[i].fillAmount=i<fullEggMaxIndex ? 1 : i>fullEggMaxIndex?0: (data[index].Timer % popovEggTime) / popovEggTime;
+            if (accumulateAbility.IsReady) continue;
+            accumulateAbility.Timer += Time.deltaTime;
+            accumulateAbility.Timer = Mathf.Clamp(accumulateAbility.Timer, 0, accumulateAbility.CulDownTime);
+            if (Math.Abs(accumulateAbility.Timer - accumulateAbility.CulDownTime) < 1e-3)
+                accumulateAbility.IsReady = true;
+            var fullEggMaxIndex = (int)Math.Floor(accumulateAbility.Timer / accumulateAbility.OneChargeTime);
+            if (fullEggMaxIndex > accumulateAbility.CurrentReadyChargeAmount)
+                audioController.Play(accumulateAbility.AudioSource,
+                    fullEggMaxIndex == accumulateAbility.ChargeAmount
+                        ? accumulateAbility.ReadyClip
+                        : accumulateAbility.OneChargeReady, AudioMixerOutputGroups.SilentClips);
+            accumulateAbility.CurrentReadyChargeAmount = fullEggMaxIndex;
+            for (var j = 0; j < accumulateAbility.Icons.Length; j++)
+                accumulateAbility.Icons[j].fillAmount = j < fullEggMaxIndex ? 1 :
+                    j > fullEggMaxIndex ? 0 :
+                    accumulateAbility.Timer % accumulateAbility.OneChargeTime / accumulateAbility.OneChargeTime;
         }
     }
 
-    private void UpdateAllTimers()
+    private void FillCommonAbility()
     {
-        for (var i = 0; i < data.Length; i++)
+        foreach (var ability in data)
         {
-            if (data[i].IsReady) continue;
-            data[i].Timer += Time.deltaTime;
-            data[i].Timer = Mathf.Clamp(data[i].Timer, 0, data[i].CulDownTime);
-            if (Math.Abs(data[i].Timer - data[i].CulDownTime) < 1e-3)
+            if (ability.IsReady) continue;
+            ability.Timer += Time.deltaTime;
+            ability.Timer = Mathf.Clamp(ability.Timer, 0, ability.CulDownTime);
+            if (Math.Abs(ability.Timer - ability.CulDownTime) < 1e-3)
             {
-                data[i].IsReady = true;
-                audioController.Play(AudioSources.UIFX, data[i].ReadyClip, AudioMixerOutputGroups.SilentClips);
+                ability.IsReady = true;
+                audioController.Play(ability.AudioSource, ability.ReadyClip, AudioMixerOutputGroups.SilentClips);
             }
-            if (data[i].Name=="Popov")
-            {
-                FillPopovEggs();
-                continue;
-            }
-            inactiveIcons[i].fillAmount = 1 - (data[i].Timer / data[i].CulDownTime);
+
+            ability.InactiveIcon.fillAmount = 1 - ability.Timer / ability.CulDownTime;
         }
     }
 
-    void Update()
+    private void Update()
     {
-        UpdateAllTimers();
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            CallTitor();
-        }
+        FillCommonAbility();
+        FillAccumulateAbility();
+        if (Input.GetKeyDown(KeyCode.E)) CallTitor();
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            CallPopov();
-        }
+        if (Input.GetKeyDown(KeyCode.R)) CallPopov();
+
+        if (Input.GetKeyDown(KeyCode.Q)) CallCleaningShield();
     }
 
     private GameObject FindCucumberButton()
@@ -142,45 +167,64 @@ public class AbilityController : MonoBehaviour
             if (currentChooseScreen.transform.GetChild(i).name != "CucumberAttackButton") continue;
             return currentChooseScreen.transform.GetChild(i).gameObject;
         }
+
         return null;
+    }
+
+    private void CallCleaningShield()
+    {
+        var cleanerData = accumulateData[(int)AccumulateAbilityIndex.CleaningShield];
+        if (cleanerData.Timer >= cleanerData.OneChargeTime)
+        {
+            Instantiate(bulletsCleaner, bulletsCleanerSpawnPoint.position, Quaternion.identity);
+            cleanerData.Timer -= cleanerData.OneChargeTime;
+            cleanerData.IsReady = false;
+            return;
+        }
+
+        warningController.ThrowWarning(WarningType.CleanerNotready);
     }
 
     private void CallPopov()
     {
-        const int Index = (int)AbilityIndex.Popov;
-        if (data[Index].Timer>=popovEggTime)
+        var popovData = accumulateData[(int)AccumulateAbilityIndex.Popov];
+        if (popovData.Timer >= popovData.OneChargeTime)
         {
             ToggleChooseScreen(popovChooseScreen);
             var cucumberButton = FindCucumberButton();
             var buttonComponent = cucumberButton.GetComponent<Button>();
             var image = cucumberButton.GetComponent<Image>();
-            if (!data[Index].IsReady)
+            if (!popovData.IsReady)
             {
                 buttonComponent.enabled = false;
-                image.color=Color.gray;
+                image.color = Color.gray;
             }
             else
             {
                 buttonComponent.enabled = true;
                 image.color = Color.white;
             }
+
             return;
         }
+
         warningController.ThrowWarning(WarningType.PopovNotReady);
     }
 
     public void CucumberAttack()
     {
+        var popovData = accumulateData[(int)AccumulateAbilityIndex.Popov];
         Instantiate(popovWithCucumber, popovSpawnPoint.position, Quaternion.identity);
-        data[(int)AbilityIndex.Popov].Timer =0;
-        data[(int)AbilityIndex.Popov].IsReady = false;
+        popovData.Timer = 0;
+        popovData.IsReady = false;
     }
 
     public void EggAttack()
     {
+        var popovData = accumulateData[(int)AccumulateAbilityIndex.Popov];
         Instantiate(popovWithEgg, popovSpawnPoint.position, Quaternion.identity);
-        data[(int)AbilityIndex.Popov].Timer -= popovEggTime;
-        data[(int)AbilityIndex.Popov].IsReady = false;
+        popovData.Timer -= popovData.OneChargeTime;
+        popovData.IsReady = false;
     }
 
     public void ReturnToGame()
@@ -206,20 +250,51 @@ public class AbilityController : MonoBehaviour
 
     private class AbilityData
     {
-        public AbilityData(float culDownTime, string name, FXClips readyClip)
+        public readonly float CulDownTime;
+        public readonly Image InactiveIcon;
+        public readonly FXClips ReadyClip;
+        public readonly AudioSources AudioSource;
+        public bool IsReady;
+        public float Timer;
+
+        public AbilityData(float culDownTime, AudioSources audioSource, FXClips readyClip, Image inactiveIcon)
         {
             Timer = 0;
             CulDownTime = culDownTime;
-            Name = name;
             ReadyClip = readyClip;
+            InactiveIcon = inactiveIcon;
+            AudioSource = audioSource;
             IsReady = false;
         }
+    }
 
-        public string Name;
-        public float Timer;
-        public float CulDownTime;
-        public FXClips ReadyClip;
+    private class AccumulateAbilityData
+    {
+        public readonly int ChargeAmount;
+        public readonly float CulDownTime;
+        public readonly Image[] Icons;
+        public readonly FXClips OneChargeReady;
+        public readonly float OneChargeTime;
+        public readonly FXClips ReadyClip;
+        public readonly AudioSources AudioSource;
+        public int CurrentReadyChargeAmount;
         public bool IsReady;
+        public float Timer;
 
+        public AccumulateAbilityData(float oneChargeTime, int chargeAmount, AudioSources audioSource, FXClips readyClip,
+            FXClips oneChargeReady,
+            Image[] icons)
+        {
+            Timer = 0;
+            CulDownTime = oneChargeTime * chargeAmount;
+            OneChargeTime = oneChargeTime;
+            ReadyClip = readyClip;
+            ChargeAmount = chargeAmount;
+            IsReady = false;
+            CurrentReadyChargeAmount = 0;
+            Icons = icons;
+            AudioSource = audioSource;
+            OneChargeReady = oneChargeReady;
+        }
     }
 }

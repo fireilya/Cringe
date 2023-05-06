@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
             case ColliderIdentifier.good:
                 return;
             case ColliderIdentifier.bad: 
-                Hit();
+                //Hit();
                 break;
             case ColliderIdentifier.bonus:
                 ApplyBonus(collider.tag);
@@ -146,7 +146,7 @@ public class Player : MonoBehaviour
                 abilityController.ApplyTimerBoostBonus(AbilityIndex.Titor, 20f);
                 break;
             case "PopovBoost":
-                abilityController.ApplyTimerBoostBonus(AbilityIndex.Popov, 15f);
+                abilityController.ApplyTimerBoostBonus(AccumulateAbilityIndex.Popov, 15f);
                 break;
         }
         audioController.Play(AudioSources.BonusFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);

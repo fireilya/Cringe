@@ -18,14 +18,14 @@ public class EnemyBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.tag == "Popov")
+        if (collider.tag is "Popov" or "CleaningShield")
         {
             Destroy(gameObject);
+            return;
         }
         if (data.DamageData.ContainsKey(collider.tag))
         {
             health -= data.DamageData[collider.tag];
-            return;
         }
     }
     public void Setup(Vector2 direction, float moveSpeed, float rotationSpeed, float lifeTime)

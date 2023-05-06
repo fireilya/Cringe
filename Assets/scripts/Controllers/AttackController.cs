@@ -60,7 +60,6 @@ public class AttackController : MonoBehaviour
             }
             previousAttack = newAttack;
             currentAttack = newAttack;
-            Debug.Log(currentAttack);
             directors[currentAttack].Play();
 
 

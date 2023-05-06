@@ -7,6 +7,9 @@
         Gun,
         BonusFX,
         UIFX,
-        Bazuka
+        Bazuka,
+        PopovNotification,
+        TitorNotification,
+        CleanerNotification,
     }
 }

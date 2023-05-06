@@ -9,6 +9,12 @@ namespace Assets.scripts.Enums
     public enum AbilityIndex
     {
         Titor,
-        Popov
+        
+    }
+
+    public enum AccumulateAbilityIndex
+    {
+        Popov,
+        CleaningShield
     }
 }
