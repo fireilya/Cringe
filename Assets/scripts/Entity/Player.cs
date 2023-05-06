@@ -152,7 +152,7 @@ public class Player : MonoBehaviour
                 abilityController.ApplyTimerBoostBonus(AccumulateAbilityIndex.CleaningShield, 20f);
                 break;
         }
-        audioController.Play(AudioSources.BonusFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);
+        audioController.PlayFX(AudioSources.BonusFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);
     }
 
     private IEnumerator ShowUnhittablePlayer()
@@ -170,7 +170,7 @@ public class Player : MonoBehaviour
     {
         if (!unhitableTimer.IsEnded) return;
         unhitableTimer.StartTimer(1.0f);
-        audioController.Play(AudioSources.PlayerFX,FXClips.Hit, AudioMixerOutputGroups.SilentClips);
+        audioController.PlayFX(AudioSources.PlayerFX,FXClips.Hit, AudioMixerOutputGroups.SilentClips);
         StartCoroutine(ShowUnhittablePlayer());
         gameController.Hit();
         for (var i = 0; i < playerTriggers.Length; i++)
@@ -295,7 +295,7 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButton(0) && bulletTimer.IsEnded)
         {
             Instantiate(bullet, bulletSpawnerTransform.position, Quaternion.identity);
-            audioController.Play(AudioSources.PlayerFX, FXClips.PlayerLaserShoot);
+            audioController.PlayFX(AudioSources.PlayerFX, FXClips.PlayerLaserShoot);
             bulletTimer.StartTimer(0.1f);
         }
     }

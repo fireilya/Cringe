@@ -6,7 +6,7 @@ public class LJRocket : MonoBehaviour
 {
     [SerializeField]
     private Spawner explodeSpawner;
-    private int health = 30;
+    private int health = 5;
     private Rigidbody2D rigidbody;
     private float boostForce=2.5f;
 

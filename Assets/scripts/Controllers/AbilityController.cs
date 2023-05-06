@@ -120,7 +120,7 @@ public class AbilityController : MonoBehaviour
                 accumulateAbility.IsReady = true;
             var fullEggMaxIndex = (int)Math.Floor(accumulateAbility.Timer / accumulateAbility.OneChargeTime);
             if (fullEggMaxIndex > accumulateAbility.CurrentReadyChargeAmount)
-                audioController.Play(accumulateAbility.AudioSource,
+                audioController.PlayFX(accumulateAbility.AudioSource,
                     fullEggMaxIndex == accumulateAbility.ChargeAmount
                         ? accumulateAbility.ReadyClip
                         : accumulateAbility.OneChargeReady, AudioMixerOutputGroups.SilentClips);
@@ -142,7 +142,7 @@ public class AbilityController : MonoBehaviour
             if (Math.Abs(ability.Timer - ability.CulDownTime) < 1e-3)
             {
                 ability.IsReady = true;
-                audioController.Play(ability.AudioSource, ability.ReadyClip, AudioMixerOutputGroups.SilentClips);
+                audioController.PlayFX(ability.AudioSource, ability.ReadyClip, AudioMixerOutputGroups.SilentClips);
             }
 
             ability.InactiveIcon.fillAmount = 1 - ability.Timer / ability.CulDownTime;

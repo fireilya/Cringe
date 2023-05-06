@@ -56,7 +56,7 @@ public class RocketController : MonoBehaviour
 
     private void CreateRocket()
     {
-        audioController.Play(AudioSources.PlayerFX, FXClips.RocketReload);
+        audioController.PlayFX(AudioSources.PlayerFX, FXClips.RocketReload);
         spawnedRocket = Instantiate(mainRocket, rocketSpawnerTransform.position, player.transform.rotation);
         spawnedRocket.gameObject.transform.parent = player.transform;
         isEmpty = false;

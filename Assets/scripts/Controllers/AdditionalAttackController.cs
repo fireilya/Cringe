@@ -30,7 +30,6 @@ public class AdditionalAttackController : MonoBehaviour
     }
     void Start()
     {
-        isAttackAllowed=true;
     }
 
     // Update is called once per frame

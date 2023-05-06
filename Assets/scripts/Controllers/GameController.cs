@@ -22,8 +22,18 @@ public class GameController : MonoBehaviour
     private MoralPressureController moralPressureController;
     [SerializeField]
     private RocketController rocketController;
+    [SerializeField]
+    private StateController stateController;
     private int bossState;
     private int currentLife;
+
+    public void ChangeStateIfNeed(int health)
+    {
+        var newState = stateController.CheckStateByHealth(health);
+        if (newState == bossState) return;
+        bossState = newState;
+        stateController.SetTransitionAttack(newState);
+    }
 
     private void DestroyScene()
     {
@@ -89,11 +99,11 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1;
         rocketController.Reload();
         player.gameObject.SetActive(true);
-        attackController.AllowAttack(false);
+        attackController.AllowFirstAttack();
+        mainEnemy.StartBuilding(1.0f);
         playerHealthAmount = 3;
         player.transform.position = Vector3.zero;
-        mainEnemy.ResetCurrentState(bossState);
-        attackController.AllowAttack(false);
+        stateController.SetTransitionAttack(bossState);
         healthManager.UpdateHealth(playerHealthAmount);
     }
 
@@ -112,9 +122,5 @@ public class GameController : MonoBehaviour
     {
         playerHealthAmount = playerHealthAmount<3?3:playerHealthAmount;
         healthManager.UpdateHealth(playerHealthAmount);
-    }
-    public void EndGame()
-    {
-
     }
 }

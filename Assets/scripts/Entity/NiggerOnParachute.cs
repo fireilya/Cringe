@@ -28,7 +28,7 @@ public class NiggerOnParachute : MonoBehaviour
     [SerializeField]
     private Timer lifeTimer;
     private Random rand=new();
-    private int health = 25;
+    private int health = 5;
     private SpriteRenderer niggerSpriteRenderer;
 
     [SerializeField]

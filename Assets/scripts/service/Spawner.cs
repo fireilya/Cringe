@@ -136,9 +136,9 @@ public class Spawner : MonoBehaviour
                 newBullet.Setup(forward.Rotate(j), moveSpeed, rotationSpeed, lifeTime);
             }
 
-            audioController.Play(source, shotClip);
+            audioController.PlayFX(source, shotClip);
             yield return new WaitForSeconds(shotTime);
-            audioController.Play(source, reloadClip);
+            audioController.PlayFX(source, reloadClip);
             yield return new WaitForSeconds(shotsDelay);
         }
     }

@@ -1,0 +1,67 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using Assets.scripts.Enums;
+using UnityEngine;
+
+public class StateController : MonoBehaviour
+{
+    [SerializeField]
+    private AttackController attackController;
+    [SerializeField]
+    private AdditionalAttackController additionalAttackController;
+    [SerializeField]
+    private Morgen morgen;
+    [SerializeField]
+    private AudioController audioController;
+
+    [SerializeField]
+    private GameObject healthMarker;
+    public void SetTransitionAttack(int state)
+    {
+        morgen.ChangeMorgenHittableState(false);
+        if (state == 0)
+        {
+            SetState(state);
+            return;
+        }
+        attackController.NextTransitionAttack = state - 1;
+        attackController.IsStateTransitionAttack=true;
+        attackController.NextTransitionAttack=state-1;
+        morgen.SetStateHealth(state);
+
+    }
+
+    public void SetState(int state)
+    {
+        morgen.ChangeMorgenHittableState(true);
+        switch (state)
+        {
+            case 0:
+                audioController.PlayMusic(Music.Celerity);
+                attackController.AttackAmount = 4;
+                break;
+            case 1:
+                audioController.PlayMusic(Music.Pursuit);
+                attackController.AttackAmount = 7;
+                Destroy(healthMarker);
+                break;
+            case 2:
+                additionalAttackController.AllowAttack(false);
+                attackController.AttackAmount = attackController.FullAttackAmount;
+                audioController.PlayMusic(Music.Realistic);
+                break;
+        }
+        attackController.AllowAttack(false);
+    }
+
+    public int CheckStateByHealth(int health)
+    {
+        return health switch
+        {
+            >= 1950 => 0,
+            > 1000 and < 1950 => 1,
+            _ => 2
+        };
+    }
+}
