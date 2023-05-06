@@ -61,11 +61,11 @@ public class AbilityController : MonoBehaviour
     {
         data = new AbilityData[]
         {
-            new(100, AudioSources.TitorNotification, FXClips.TitorReady, titorInactiveIcon)
+            new(10, AudioSources.TitorNotification, FXClips.TitorReady, titorInactiveIcon)
         };
         accumulateData = new AccumulateAbilityData[]
         {
-            new(30, 3, AudioSources.PopovNotification, FXClips.PopovReady, FXClips.PopovEggReady, popovEggs),
+            new(3, 3, AudioSources.PopovNotification, FXClips.PopovReady, FXClips.PopovEggReady, popovEggs),
             new(20, 3, AudioSources.CleanerNotification, FXClips.CleanerReady, FXClips.CleanerReady, cleaners)
         };
     }
@@ -120,7 +120,7 @@ public class AbilityController : MonoBehaviour
                 accumulateAbility.IsReady = true;
             var fullEggMaxIndex = (int)Math.Floor(accumulateAbility.Timer / accumulateAbility.OneChargeTime);
             if (fullEggMaxIndex > accumulateAbility.CurrentReadyChargeAmount)
-                audioController.PlayFX(accumulateAbility.AudioSource,
+                audioController.Play(accumulateAbility.AudioSource,
                     fullEggMaxIndex == accumulateAbility.ChargeAmount
                         ? accumulateAbility.ReadyClip
                         : accumulateAbility.OneChargeReady, AudioMixerOutputGroups.SilentClips);
@@ -142,7 +142,7 @@ public class AbilityController : MonoBehaviour
             if (Math.Abs(ability.Timer - ability.CulDownTime) < 1e-3)
             {
                 ability.IsReady = true;
-                audioController.PlayFX(ability.AudioSource, ability.ReadyClip, AudioMixerOutputGroups.SilentClips);
+                audioController.Play(ability.AudioSource, ability.ReadyClip, AudioMixerOutputGroups.SilentClips);
             }
 
             ability.InactiveIcon.fillAmount = 1 - ability.Timer / ability.CulDownTime;

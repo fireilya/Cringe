@@ -16,7 +16,7 @@ public class Egg : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.name== "Morgen" && isLaunched)
+        if (collider.gameObject.name is "Morgen" or "StaticEnemyShield(Clone)" or "MorgenMouth" && isLaunched)
         {
             Instantiate(explode, transform.position, Quaternion.identity);
             Destroy(gameObject);

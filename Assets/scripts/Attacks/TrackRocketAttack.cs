@@ -58,7 +58,7 @@ public class TrackRocketAttack : MonoBehaviour, IAttack
     public IEnumerator DelayShot()
     {
         rocketSpawner.SpawnTrackRocket();
-        audioController.PlayFX(AudioSources.Bazuka, FXClips.BazukaShot, AudioMixerOutputGroups.SilentClips);
+        audioController.Play(AudioSources.Bazuka, FXClips.BazukaShot, AudioMixerOutputGroups.SilentClips);
         yield return new WaitForSeconds(0.5f);
         SetNextRotation();
     }

@@ -26,7 +26,7 @@ public class Rocket : MonoBehaviour
     {
         if (tag=="rocket")
         {
-            if (collider.tag == "missileObstacle" && isDestructible || collider.gameObject.name is "Morgen" or "MorgenMouth")
+            if (collider.tag == "missileObstacle" && isDestructible || collider.gameObject.name is "Morgen" or "StaticEnemyShield(Clone)" or "MorgenMouth")
             {
                 Instantiate(explosionRadius, transform.position, Quaternion.identity);
                 Destroy(lifeTimer);

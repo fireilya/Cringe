@@ -57,7 +57,7 @@ public class NegrGunAttack : MonoBehaviour, IAttack
 
     public IEnumerator DelayShot()
     {
-        negrSpawner.CommonNegrShot();
+        negrSpawner.CommonNegrShot(7);
         yield return new WaitForSeconds(0.5f);
         SetNextRotation();
     }

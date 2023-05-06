@@ -136,9 +136,9 @@ public class Spawner : MonoBehaviour
                 newBullet.Setup(forward.Rotate(j), moveSpeed, rotationSpeed, lifeTime);
             }
 
-            audioController.PlayFX(source, shotClip);
+            audioController.Play(source, shotClip);
             yield return new WaitForSeconds(shotTime);
-            audioController.PlayFX(source, reloadClip);
+            audioController.Play(source, reloadClip);
             yield return new WaitForSeconds(shotsDelay);
         }
     }
@@ -205,7 +205,7 @@ public class Spawner : MonoBehaviour
             10f);
     }
 
-    public void CommonNegrShot()
+    public void CommonNegrShot(int bulletAmount)
     {
         StartCoroutine(DoShot(
             negrBullet,
@@ -215,7 +215,7 @@ public class Spawner : MonoBehaviour
             0.3f,
             1,
             0.0f,
-            7,
+            bulletAmount,
             6f,
             0f,
             45,

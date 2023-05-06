@@ -74,7 +74,7 @@ public class Morgen : MonoBehaviour
         {
             gameController.Win();
         }
-        healthBar.fillAmount = ((float)currentHealth - fakemaxHealth) / fakemaxHealth;
+        healthBar.fillAmount = ((float)currentHealth - healthOffset) / fakemaxHealth;
     }
 
     void OnTriggerEnter2D(Collider2D collider)

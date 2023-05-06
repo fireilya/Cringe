@@ -68,6 +68,6 @@ public class WarningController : MonoBehaviour
                 break;
 
         }
-        audioController.PlayFX(AudioSources.UIFX, FXClips.Warning);
+        audioController.Play(AudioSources.UIFX, FXClips.Warning);
     }
 }

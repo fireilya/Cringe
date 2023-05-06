@@ -29,7 +29,6 @@ public class StateController : MonoBehaviour
         attackController.IsStateTransitionAttack=true;
         attackController.NextTransitionAttack=state-1;
         morgen.SetStateHealth(state);
-
     }
 
     public void SetState(int state)
@@ -38,18 +37,18 @@ public class StateController : MonoBehaviour
         switch (state)
         {
             case 0:
-                audioController.PlayMusic(Music.Celerity);
+                audioController.Play(AudioSources.Music, Music.Celerity);
                 attackController.AttackAmount = 4;
                 break;
             case 1:
-                audioController.PlayMusic(Music.Pursuit);
+                audioController.Play(AudioSources.Music, Music.Pursuit);
                 attackController.AttackAmount = 7;
                 Destroy(healthMarker);
                 break;
             case 2:
                 additionalAttackController.AllowAttack(false);
                 attackController.AttackAmount = attackController.FullAttackAmount;
-                audioController.PlayMusic(Music.Realistic);
+                audioController.Play(AudioSources.Music, Music.Realistic);
                 break;
         }
         attackController.AllowAttack(false);
@@ -59,8 +58,8 @@ public class StateController : MonoBehaviour
     {
         return health switch
         {
-            >= 1950 => 0,
-            > 1000 and < 1950 => 1,
+            >= 1750 => 0,
+            > 1000 and < 1750 => 1,
             _ => 2
         };
     }

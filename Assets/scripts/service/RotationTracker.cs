@@ -19,6 +19,11 @@ public class RotationTracker : MonoBehaviour
     private string targetTag;
 
     public bool isEnable;
+
+    public void Toggle()
+    {
+        isEnable=!isEnable;
+    }
     void Start()
     {
         target = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();

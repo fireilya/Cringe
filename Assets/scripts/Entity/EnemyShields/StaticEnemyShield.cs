@@ -21,6 +21,10 @@ public class StaticEnemyShield : MonoBehaviour
     private bool isBuilding;
 
     private bool isHittable;
+    [SerializeField]
+    private float growSpeed=7;
+
+    private bool isDestroyed;
 
     void OnTriggerEnter2D(Collider2D collider)
     {
@@ -60,9 +64,20 @@ public class StaticEnemyShield : MonoBehaviour
             isBuilding = !isHittable;
             return;
         }
+
+        if (isDestroyed)
+        {
+            transform.localScale = new Vector3(
+                transform.localScale.x + growSpeed * Time.deltaTime,
+                transform.localScale.y + growSpeed * Time.deltaTime,
+                transform.localScale.z + growSpeed * Time.deltaTime);
+            return;
+        }
+
         if (currentHealth<=0)
         {
-            Destroy(gameObject);
+            Destroy(gameObject, 3f);
+            isDestroyed=true;
         }
     }
 }
