@@ -14,9 +14,6 @@ public class StateController : MonoBehaviour
     private AudioController audioController;
 
     [SerializeField]
-    private GameObject healthMarker;
-
-    [SerializeField]
     private Morgen morgen;
 
     public void SetTransitionAttack(int state)
@@ -42,12 +39,10 @@ public class StateController : MonoBehaviour
             case 0:
                 audioController.Play(AudioSources.Music, Music.Celerity);
                 attackController.AttackAmount = Config.AllowedAttackAmountByState[0];
-                healthMarker.SetActive(true);
                 break;
             case 1:
                 audioController.Play(AudioSources.Music, Music.Pursuit);
                 attackController.AttackAmount = Config.AllowedAttackAmountByState[1];
-                Destroy(healthMarker);
                 break;
             case 2:
                 additionalAttackController.AllowAttack(false);

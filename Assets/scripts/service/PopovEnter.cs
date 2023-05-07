@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PopovEnter : MonoBehaviour
 {
-    private static readonly Queue<Popov> popovsToDestroy = new();
+    private static Queue<Popov> popovsToDestroy=new();
 
     [SerializeField]
     private Popov popovWithCucumber;
@@ -11,6 +11,10 @@ public class PopovEnter : MonoBehaviour
     [SerializeField]
     private Popov popovWithEgg;
 
+    public static void ClearQueue()
+    {
+        popovsToDestroy.Clear();
+    }
 
     public void DestroyYourself()
     {
@@ -20,11 +24,13 @@ public class PopovEnter : MonoBehaviour
     public void SpawnPopovWithCucumber()
     {
         popovsToDestroy.Enqueue(Instantiate(popovWithCucumber, transform.position, Quaternion.identity));
+        Debug.Log("Cucumber");
     }
 
     public void SpawnPopovWithEgg()
     {
         popovsToDestroy.Enqueue(Instantiate(popovWithEgg, transform.position, Quaternion.identity));
+        Debug.Log("Egg");
     }
 
     public void Out()

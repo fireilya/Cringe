@@ -99,6 +99,7 @@ public class GameController : MonoBehaviour
 
     public void StartGame()
     {
+        PopovEnter.ClearQueue();
         Cursor.lockState = CursorLockMode.Locked;
         UnpackData();
         Time.timeScale = 1;

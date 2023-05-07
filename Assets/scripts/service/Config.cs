@@ -47,7 +47,7 @@ namespace Assets.scripts.service
         public static readonly int[] MainEnemyStateHealth =
         {
             2000,
-            1750,
+            1650,
             1000
         };
 
