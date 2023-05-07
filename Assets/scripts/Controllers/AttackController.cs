@@ -1,10 +1,14 @@
 using Assets.scripts;
+using Assets.scripts.service;
 using UnityEngine;
 using UnityEngine.Playables;
 using Random = System.Random;
 
 public class AttackController : MonoBehaviour
 {
+    private readonly Random random = new();
+    private readonly int SupplyAttackRare = 7;
+
     [SerializeField]
     private PlayableDirector[] _transitionAttacks;
 
@@ -32,8 +36,6 @@ public class AttackController : MonoBehaviour
     public int NextTransitionAttack;
 
     private int previousAttack = -1;
-    private readonly Random random = new();
-    private readonly int SupplyAttackRare = 7;
 
     [SerializeField]
     private Timer waitTimer;
@@ -74,27 +76,32 @@ public class AttackController : MonoBehaviour
     {
         if (isChooseAllowed && waitTimer.IsEnded)
         {
-            if (IsStateTransitionAttack)
+            if (!Config.IsDevelopmentVersion)
             {
-                StartTransitionAttack();
-                return;
+                if (IsStateTransitionAttack)
+                {
+                    StartTransitionAttack();
+                    return;
+                }
+
+                int newAttack;
+                do
+                {
+                    newAttack = random.Next(0, int.MaxValue) % AttackAmount;
+                } while (newAttack == previousAttack || newAttack == 3 && attackWithoutSupply < SupplyAttackRare);
+
+                if (newAttack == 3) attackWithoutSupply = 0;
+                else attackWithoutSupply++;
+                previousAttack = newAttack;
+                currentAttack = newAttack;
+                attacks[currentAttack].Play();
+            }
+            else
+            {
+                currentAttack = 3;
+                attacks[3].Play();
             }
 
-            int newAttack;
-            do
-            {
-                newAttack = random.Next(0, int.MaxValue) % AttackAmount;
-            } while (newAttack == previousAttack || newAttack == 3 && attackWithoutSupply < SupplyAttackRare);
-
-            if (newAttack == 3) attackWithoutSupply = 0;
-            else attackWithoutSupply++;
-            previousAttack = newAttack;
-            currentAttack = newAttack;
-            attacks[currentAttack].Play();
-
-
-            //currentAttack = 3;
-            //directors[3].Play();
             isChooseAllowed = false;
         }
     }

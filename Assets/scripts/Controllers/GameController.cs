@@ -1,3 +1,4 @@
+using Assets.scripts.service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -112,7 +113,7 @@ public class GameController : MonoBehaviour
 
     public void SetMegaHealth()
     {
-        ResetHealth(5);
+        ResetHealth(Config.MegaPlayerHealth);
     }
 
     private void ResetHealth(int health)
@@ -123,7 +124,9 @@ public class GameController : MonoBehaviour
 
     public void ResetHealth()
     {
-        playerHealthAmount = playerHealthAmount < 3 ? 3 : playerHealthAmount;
+        playerHealthAmount = playerHealthAmount < Config.commonPlayerHealth
+            ? Config.commonPlayerHealth
+            : playerHealthAmount;
         healthManager.UpdateHealth(playerHealthAmount);
     }
 }

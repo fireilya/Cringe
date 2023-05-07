@@ -1,5 +1,6 @@
 using System;
 using Assets.scripts.Enums;
+using Assets.scripts.service;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,12 +62,14 @@ public class AbilityController : MonoBehaviour
     {
         data = new AbilityData[]
         {
-            new(100, AudioSources.TitorNotification, FXClips.TitorReady, titorInactiveIcon)
+            new(Config.TitorCulDown, AudioSources.TitorNotification, FXClips.TitorReady, titorInactiveIcon)
         };
         accumulateData = new AccumulateAbilityData[]
         {
-            new(30, 3, AudioSources.PopovNotification, FXClips.PopovReady, FXClips.PopovEggReady, popovEggs),
-            new(20, 3, AudioSources.CleanerNotification, FXClips.CleanerReady, FXClips.CleanerReady, cleaners)
+            new(Config.PopovEggCulDown, Config.PopovEggsCount, AudioSources.PopovNotification, FXClips.PopovReady,
+                FXClips.PopovEggReady, popovEggs),
+            new(Config.CleanerChargeCulDown, Config.CleanerChargeCount, AudioSources.CleanerNotification,
+                FXClips.CleanerReady, FXClips.CleanerReady, cleaners)
         };
     }
 

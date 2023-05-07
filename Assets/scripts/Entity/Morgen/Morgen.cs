@@ -1,15 +1,16 @@
 using System;
+using Assets.scripts.service;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Morgen : MonoBehaviour
 {
-    private readonly int maxHealth = 2000;
+    private readonly int maxHealth = Config.MainEnemyStateHealth[0];
     protected bool _isHittable;
     protected int currentHealth;
 
 
-    protected int fakemaxHealth = 1000;
+    protected int fakemaxHealth = Config.MainEnemyFakeHealth;
     private float fillSpeed;
 
     [SerializeField]
@@ -24,10 +25,11 @@ public class Morgen : MonoBehaviour
     [SerializeField]
     protected MissileData misileData;
 
-    void OnEnable()
+    private void OnEnable()
     {
         isBuilding = false;
     }
+
     private void Awake()
     {
         currentHealth = maxHealth;
@@ -46,7 +48,7 @@ public class Morgen : MonoBehaviour
 
     public void StartBuilding(float buildTime)
     {
-        fillSpeed = (((float)currentHealth - healthOffset) / fakemaxHealth) / buildTime;
+        fillSpeed = ((float)currentHealth - healthOffset) / fakemaxHealth / buildTime;
         isBuilding = true;
         _isHittable = false;
     }
@@ -56,17 +58,18 @@ public class Morgen : MonoBehaviour
         switch (state)
         {
             case 0:
-                healthOffset = 1000;
-                currentHealth = 2000;
-                
+                healthOffset = Config.MainEnemyStateHealthOffset[0];
+                currentHealth = Config.MainEnemyStateHealth[0];
+
                 break;
             case 1:
-                currentHealth = 1750;
+                healthOffset = Config.MainEnemyStateHealthOffset[1];
+                currentHealth = Config.MainEnemyStateHealth[1];
                 healthBar.fillAmount = ((float)currentHealth - healthOffset) / fakemaxHealth;
                 break;
             case 2:
-                healthOffset = 0;
-                currentHealth = 1000;
+                healthOffset = Config.MainEnemyStateHealthOffset[2];
+                currentHealth = Config.MainEnemyStateHealth[2];
                 break;
         }
 

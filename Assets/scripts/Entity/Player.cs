@@ -3,28 +3,32 @@ using System.Collections;
 using System.Linq;
 using Assets.scripts;
 using Assets.scripts.Enums;
+using Assets.scripts.service;
 using UnityEngine;
 using UnityEngine.VFX;
 
 public class Player : MonoBehaviour
 {
+    private readonly float boost = 35f;
+
+
+    private readonly float gyperJumpCulDownTime = 0.2f;
+    private readonly float gyperJumpSpeed = 19f;
+
+    private readonly float repulsionForce = 20f;
+    private readonly float repulsionSlowing = 40f;
+
+    [SerializeField]
+    private readonly float speed = 5f;
+
     [SerializeField]
     private AbilityController abilityController;
 
     [SerializeField]
     private AudioController audioController;
 
-    private readonly string[] bonusTags =
-    {
-        "FullRockets",
-        "FullHealth",
-        "MegaHealth",
-        "TitorBoost",
-        "PopovBoost",
-        "CleanerBoost"
-    };
-
-    private readonly float boost = 35f;
+    [SerializeField]
+    private BonusController bonusController;
 
     [SerializeField]
     private VisualEffect boostVFX;
@@ -43,27 +47,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameController gameController;
 
-    private readonly string[] goodTags =
-    {
-        "rocket",
-        "bullet",
-        "Titor",
-        "Popov",
-        "Egg",
-        "CleaningShield"
-    };
-
-    private readonly float gyperJumpCulDownTime = 0.2f;
     private Timer gyperJumpCulDownTimer;
-    private readonly float gyperJumpSpeed = 19f;
 
     [SerializeField]
     private HealthManager healthMenager;
 
-    private readonly float highLimit = 4.74f;
     private bool isMovementBlocked;
-    private readonly float leftLimit = -8.34f;
-    private readonly float lowLimit = -4.04f;
 
     [SerializeField]
     private Timer mainTimer;
@@ -79,16 +68,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private HitFromTrigger[] playerTriggers;
 
-    private readonly float repulsionForce = 20f;
-    private readonly float repulsionSlowing = 40f;
     private Vector2 repulsionVector;
-    private readonly float rightLimit = 8.34f;
 
     [SerializeField]
     private RocketController rocketController;
-
-    [SerializeField]
-    private readonly float speed = 5.0f;
 
     private Timer unhitableTimer;
 
@@ -98,8 +81,10 @@ public class Player : MonoBehaviour
     private void KeepInBorder()
     {
         transform.localPosition = new Vector3(
-            Mathf.Clamp(transform.localPosition.x, leftLimit, rightLimit),
-            Mathf.Clamp(transform.localPosition.y, lowLimit, highLimit),
+            Mathf.Clamp(transform.localPosition.x, Config.GetGameZoneLimits(Border.Left),
+                Config.GetGameZoneLimits(Border.Right)),
+            Mathf.Clamp(transform.localPosition.y, Config.GetGameZoneLimits(Border.Bottom),
+                Config.GetGameZoneLimits(Border.Top)),
             transform.localPosition.z);
     }
 
@@ -130,41 +115,15 @@ public class Player : MonoBehaviour
             case ColliderIdentifier.good:
                 return;
             case ColliderIdentifier.bad:
-                Hit();
+                if (!Config.IsDevelopmentVersion) Hit();
                 break;
             case ColliderIdentifier.bonus:
-                ApplyBonus(collider.tag);
+                bonusController.ApplyBonus(collider.tag);
                 Destroy(collider.gameObject);
                 break;
         }
     }
 
-    private void ApplyBonus(string bonus)
-    {
-        switch (bonus)
-        {
-            case "FullHealth":
-                gameController.ResetHealth();
-                break;
-            case "FullRockets":
-                rocketController.Reload();
-                break;
-            case "MegaHealth":
-                gameController.SetMegaHealth();
-                break;
-            case "TitorBoost":
-                abilityController.ApplyTimerBoostBonus(AbilityIndex.Titor, 20f);
-                break;
-            case "PopovBoost":
-                abilityController.ApplyTimerBoostBonus(AccumulateAbilityIndex.Popov, 15f);
-                break;
-            case "CleanerBoost":
-                abilityController.ApplyTimerBoostBonus(AccumulateAbilityIndex.CleaningShield, 20f);
-                break;
-        }
-
-        audioController.Play(AudioSources.BonusFX, FXClips.Bonus, AudioMixerOutputGroups.SilentClips);
-    }
 
     private IEnumerator ShowUnhittablePlayer()
     {
@@ -191,7 +150,6 @@ public class Player : MonoBehaviour
             break;
         }
 
-        Debug.Log("HOT!!!" + repulsionVector);
         currentSpeed = repulsionForce;
         isMovementBlocked = true;
         playerAnimator.SetTrigger("Repulse");
@@ -218,9 +176,9 @@ public class Player : MonoBehaviour
     private ColliderIdentifier IdentifyCollider(Collider2D collider)
     {
         var colliderTag = collider.tag;
-        return goodTags.Any(x => x == colliderTag)
+        return Config.GoodTags.Any(x => x == colliderTag)
             ? ColliderIdentifier.good
-            : bonusTags.Any(x => x == colliderTag)
+            : Config.BonusTags.Any(x => x == colliderTag)
                 ? ColliderIdentifier.bonus
                 : ColliderIdentifier.bad;
     }
@@ -279,13 +237,13 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
         {
             var direction = Input.GetKey(KeyCode.W) ? 1 : -1;
-            velocityVector += new Vector3(0, 1, 0) * direction;
+            velocityVector += Vector3.up * direction;
         }
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
             var direction = Input.GetKey(KeyCode.D) ? 1 : -1;
-            velocityVector += new Vector3(1, 0, 0) * direction;
+            velocityVector += Vector3.right * direction;
         }
 
         playerRB.velocity = velocityVector.normalized * currentSpeed;

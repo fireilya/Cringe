@@ -1,4 +1,5 @@
 using Assets.scripts.Enums;
+using Assets.scripts.service;
 using UnityEngine;
 
 public class StateController : MonoBehaviour
@@ -28,6 +29,7 @@ public class StateController : MonoBehaviour
             SetState(state);
             return;
         }
+
         attackController.NextTransitionAttack = state - 1;
         attackController.IsStateTransitionAttack = true;
     }
@@ -39,12 +41,12 @@ public class StateController : MonoBehaviour
         {
             case 0:
                 audioController.Play(AudioSources.Music, Music.Celerity);
-                attackController.AttackAmount = 4;
+                attackController.AttackAmount = Config.AllowedAttackAmountByState[0];
                 healthMarker.SetActive(true);
                 break;
             case 1:
                 audioController.Play(AudioSources.Music, Music.Pursuit);
-                attackController.AttackAmount = 7;
+                attackController.AttackAmount = Config.AllowedAttackAmountByState[1];
                 Destroy(healthMarker);
                 break;
             case 2:
@@ -59,11 +61,8 @@ public class StateController : MonoBehaviour
 
     public int CheckStateByHealth(int health)
     {
-        return health switch
-        {
-            >= 1750 => 0,
-            > 1000 and < 1750 => 1,
-            _ => 2
-        };
+        if (health >= Config.MainEnemyStateHealth[1]) return 0;
+        if (health > Config.MainEnemyStateHealth[2] && health < Config.MainEnemyStateHealth[1]) return 1;
+        return 2;
     }
 }
