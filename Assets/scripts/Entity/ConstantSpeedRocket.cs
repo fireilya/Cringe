@@ -1,5 +1,6 @@
 using Assets.scripts;
 using UnityEngine;
+using UnityEngine.Experimental.Playables;
 
 public class ConstantSpeedRocket : MonoBehaviour
 {
@@ -34,15 +35,24 @@ public class ConstantSpeedRocket : MonoBehaviour
     {
         if (data.DamageData.ContainsKey(collider.tag) && collider.tag != "ExplosionRadius")
             health -= data.DamageData[collider.tag];
+        if (collider.tag=="Popov")
+        {
+            Explode();
+        }
+    }
+
+    private void Explode()
+    {
+        Instantiate(explodeAudioSource);
+        explodeSpawner.SingleFireBurst();
+        Destroy(gameObject);
     }
 
     private void Update()
     {
         if (lifeTimer.IsEnded || health <= 0)
         {
-            Instantiate(explodeAudioSource);
-            explodeSpawner.SingleFireBurst();
-            Destroy(gameObject);
+            Explode();
         }
 
         transform.localPosition += transform.right * moveSpeed * Time.deltaTime;

@@ -26,6 +26,17 @@ public class LJRocket : MonoBehaviour
     {
         if (data.DamageData.ContainsKey(collider.tag) && collider.tag != "ExplosionRadius")
             health -= data.DamageData[collider.tag];
+        if (collider.tag=="Popov")
+        {
+            Explode();
+        }
+    }
+
+    private void Explode()
+    {
+        Instantiate(postExplodeSound, transform.position, Quaternion.identity);
+        explodeSpawner.LJExplode();
+        Destroy(gameObject);
     }
 
     private void Update()
@@ -37,9 +48,7 @@ public class LJRocket : MonoBehaviour
             transform.position.z);
         if (health <= 0 || transform.position.x == 0)
         {
-            Instantiate(postExplodeSound, transform.position, Quaternion.identity);
-            explodeSpawner.LJExplode();
-            Destroy(gameObject);
+            Explode();
         }
     }
 }

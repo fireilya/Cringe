@@ -39,20 +39,21 @@ public class StaticEnemyShield : MonoBehaviour
     private void Awake()
     {
         currentHealth = maxHealth;
+        healthBar = GameObject.Find("ShieldHealthBar").GetComponent<Image>();
     }
 
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         currentHealth = maxHealth;
-        healthBar = GameObject.Find("ShieldHealthBar").GetComponent<Image>();
     }
 
     public void StartBuilding(float buildTime)
     {
         isHittable = false;
         fallingAlpha = 1 / buildTime;
-        fillSpeed = (float)currentHealth / maxHealth / buildTime;
+        fillSpeed = 1 / buildTime;
+        healthBar.fillAmount = 0;
         isBuilding = true;
     }
 

@@ -49,6 +49,7 @@ public class Morgen : MonoBehaviour
     public void StartBuilding(float buildTime)
     {
         fillSpeed = ((float)currentHealth - healthOffset) / fakemaxHealth / buildTime;
+        healthBar.fillAmount = 0;
         isBuilding = true;
         _isHittable = false;
     }
@@ -60,7 +61,7 @@ public class Morgen : MonoBehaviour
             case 0:
                 healthOffset = Config.MainEnemyStateHealthOffset[0];
                 currentHealth = Config.MainEnemyStateHealth[0];
-
+                healthBar.fillAmount = 0;
                 break;
             case 1:
                 healthOffset = Config.MainEnemyStateHealthOffset[1];
@@ -70,6 +71,7 @@ public class Morgen : MonoBehaviour
             case 2:
                 healthOffset = Config.MainEnemyStateHealthOffset[2];
                 currentHealth = Config.MainEnemyStateHealth[2];
+                healthBar.fillAmount = 0;
                 break;
         }
 
@@ -82,7 +84,7 @@ public class Morgen : MonoBehaviour
         {
             currentHealth -= damage;
             if (currentHealth <= 0) gameController.Win();
-            healthBar.fillAmount = ((float)currentHealth - healthOffset) / fakemaxHealth;
+            if (!isBuilding) healthBar.fillAmount = ((float)currentHealth - healthOffset) / fakemaxHealth;
             gameController.ChangeStateIfNeed(currentHealth);
         }
     }

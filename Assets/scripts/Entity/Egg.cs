@@ -7,6 +7,7 @@ public class Egg : MonoBehaviour
 
     private bool isLaunched;
     private Transform morgen;
+    private Collider2D collider;
 
     [SerializeField]
     private readonly float moveSpeed = 8f;
@@ -23,11 +24,14 @@ public class Egg : MonoBehaviour
     private void Start()
     {
         morgen = GameObject.FindWithTag("Morgen").GetComponent<Transform>();
+        collider = GetComponent<CapsuleCollider2D>();
     }
 
     public void Launch()
     {
         isLaunched = true;
+        tag = "Egg";
+        collider.enabled=true;
     }
 
     // Update is called once per frame
